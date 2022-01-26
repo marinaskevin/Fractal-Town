@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta charset="utf-8"/>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=1920, initial-scale=1">
 	<title>
 		FR△CT△L T□WN HTML5
 	</title>
@@ -366,7 +366,8 @@
 
 	if(location.href.split('?').length>1)
 	{
-		var params = location.href.split('#')[0].split('?')[1].split('&');
+		var url_data = location.href.split('?')[location.href.split('?').length-1];
+		var params = url_data.split('#')[0].split('&');
 		for (x in params)
 		{
 			data[params[x].split('=')[0]] = params[x].split('=')[1];
