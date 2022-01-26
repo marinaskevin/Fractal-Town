@@ -14,6 +14,7 @@
 		font-family: "Lucida Mono", "Monaco";
 		font-size: 1.8vmax;
 		line-height: 2.1vmax;
+		-webkit-backface-visibility: hidden;
 	}
 	body
 	{
@@ -1154,18 +1155,39 @@
 		},100)
 	})
 
-	function updatePointer()
+	function updatePointer(event)
 	{
+		var x,y;
+		if(event.type == 'touchstart' ||
+			event.type == 'touchmove' ||
+			event.type == 'touchend' ||
+			event.type == 'touchcancel')
+		{
+			var touch = event.originalEvent.touches[0] || event.originalEvent.changedTouches[0];
+			x = touch.pageX;
+			y = touch.pageY;
+		}
+		else if (event.type == 'mousedown' ||
+			event.type == 'mouseup' ||
+			event.type == 'mousemove' ||
+			event.type == 'mouseover'||
+			event.type=='mouseout' ||
+			event.type=='mouseenter' ||
+			event.type=='mouseleave')
+		{
+			x = event.clientX;
+			y = event.clientY;
+		}
 		if(!loaded) return;
-		pointerX = (event.pageX - window.scrollX) - (canvas.getBoundingClientRect().left + render_radius);
-		pointerY = (event.pageY - window.scrollY) - (canvas.getBoundingClientRect().top + render_radius);
+		pointerX = x - (canvas.getBoundingClientRect().left + render_radius);
+		pointerY = y - (canvas.getBoundingClientRect().top + render_radius);
 		zoom_target[0] = (event.pageX - window.scrollX)/view_width;
 		zoom_target[1] = (event.pageY - window.scrollY)/view_height;
 	}
 
 	function onmousemove_default(event)
 	{
-		updatePointer();
+		updatePointer(event);
 		if(!loaded || out_of_bounds(event)) return;
 	}
 
@@ -1192,7 +1214,7 @@
 	}
 
 	document.onmousedown = function(event) {
-		updatePointer();
+		updatePointer(event);
 		relX = relY = 0;
 		mouse_down_X = pointerX;
 		mouse_down_Y = pointerY;
@@ -1230,7 +1252,7 @@
 		}
 		document.onmousemove = function(event) {
 			svgs.style.pointerEvents = "auto";
-			updatePointer();
+			updatePointer(event);
 			if(select_history.length<2) return;
 			if(out_of_bounds(event)) return;
 			if(distance(clickCorner,nearest([pointerX,pointerY]))==0)
@@ -1245,7 +1267,7 @@
 					render_route(event,change_cornerA,change_cornerB);	
 					document.onmouseup = function() {
 						svgs.style.pointerEvents = "none";
-						updatePointer();
+						updatePointer(event);
 						document.onmousemove = null;
 						if(out_of_bounds(event)) return;
 					};
@@ -1253,7 +1275,7 @@
 			}
 		}
 		document.onmouseup = function(event) {
-			updatePointer();
+			updatePointer(event);
 			document.onmousemove = null;
 			if(out_of_bounds(event)) return;
 			render_route(event,false,false);
