@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<meta charset="utf-8"/>
-	<meta name="viewport" content="width=1920, initial-scale=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>
 		FR△CT△L T□WN HTML5
 	</title>
@@ -38,30 +38,37 @@
 	}
 	#map_info
 	{
+		background-color: rgba(85,107,47,0.8);
 		position: fixed;
-		top: 0;
-		width: 100vw;
-		left: 0vw;
+		top: 2vh;
+		width: 80vw;
+		left: 10vw;
 		color: white;
 		text-align: center;
+		border-radius: 1.5vmax 0px 0px 1.5vmax;
+	}
+	#pixel_info, #zoom_info
+	{
+		font-size: 1.2vmax;
+		line-height: 1.5vmax;
 	}
 	#links
 	{
 		background-color: rgba(255,255,0,0.8);
 		position: fixed;
 		right: 0;
-		bottom: 5vh;
+		top: 30vh;
 		padding: 1vmax;
 		border-radius: 1.5vmax 0px 0px 1.5vmax;
 	}
 	#logger
 	{
-    	-webkit-mask-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.00,rgba(0,0,0,0)), color-stop(0.05,rgba(0,0,0,1)),color-stop(0.95,rgba(0,0,0,1)),color-stop(1.00,rgba(0,0,0,0)));				
+    	-webkit-mask-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.00,rgba(0,0,0,0)), color-stop(0.05,rgba(0,0,0,1)),color-stop(0.95,rgba(0,0,0,1)),color-stop(1.00,rgba(0,0,0,0)));
 		opacity: 1;
 		background-color: rgba(255,255,255,1);
 		color: black;
 		position: fixed;
-		width: 58vw;
+		width: 53vw;
 		height: 40vh;
 		left: 5vw;
 		font-size: 0.8vh;
@@ -89,32 +96,27 @@
 	}
 	#summary
 	{
-    	-webkit-mask-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.00,rgba(0,0,0,0)), color-stop(0.05,rgba(0,0,0,1)),color-stop(0.95,rgba(0,0,0,1)),color-stop(1.00,rgba(0,0,0,0)));				
+    	-webkit-mask-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.00,rgba(0,0,0,0)), color-stop(0.05,rgba(0,0,0,1)),color-stop(0.95,rgba(0,0,0,1)),color-stop(1.00,rgba(0,0,0,0)));
 		background-color: rgba(255,255,255,0.8);
 		position: fixed;
 		height: 33vh;
-		width: 30vw;
-		left: 65vw;
+		width: 35vw;
+		left: 61vw;
 		bottom: 2vh;
-		padding: 2.5vh;
+		padding: 2.5vh 0vh 0vh 0vh;
 		text-align: center;
 		color: black;
 		border-radius: 1.5vmax;
 	}
 	#zoom_info
 	{
-		background-color: black;
+		background-color: rgba(85,107,47,0.8);
 		position: fixed;
 		bottom: 0;
 		left: 0;
 		width: 100vw;
 		text-align: center;
 		color: white;
-	}
-	#spacer
-	{
-		position: absolute;
-		min-width: 100vw;
 	}
 	#location_pointer
 	{
@@ -215,7 +217,7 @@
        -moz-animation: fadein 3s; /* Firefox < 16 */
         -ms-animation: fadein 3s; /* Internet Explorer */
          -o-animation: fadein 3s; /* Opera < 12.1 */
-            animation: fadein 3s;		
+            animation: fadein 3s;
 	}
 
 	@keyframes fadein {
@@ -249,7 +251,6 @@
 
 </style>
 <body>
-	<div id="spacer"></div>
 	<div id="canvases">
 		<canvas id="canvas" class="fadein"></canvas>
 		<canvas id="canvas1"></canvas>
@@ -386,8 +387,6 @@
 	const system_width = base_length(levels+1);
 	const system_px_width = system_width/meters_per_pixel
 	const render_radius = system_px_width/2 * Math.sqrt(1+1/Math.pow(s,2)) * (s/(s-1));
-	document.getElementById("spacer").style.minWidth = "calc("+(render_radius*4)+"px)";
-	document.getElementById("spacer").style.minHeight = "calc("+(render_radius*4)+"px)";
 	const d60 = 60/360 * 2*Math.PI
 	const colors = ["Khaki","LightSalmon","LightGray","SkyBlue","Gold"];
 	const vehicles = ["Sidewalk","Light EV","Heavy EV","Light Rail","Heavy Rail"];
@@ -483,7 +482,16 @@
 
 	function center(object)
 	{
-		object.style.transform = 'translate('+render_radius+'px,'+render_radius+'px)';
+		var view_width = document.body.scrollWidth;
+		var view_height = document.documentElement.clientHeight - document.documentElement.offsetHeight;
+		if(render_radius <= view_width/2&&render_radius <= view_height/2)
+		{
+			object.style.transform = 'translate('+(view_width/2-render_radius)+'px,'+(view_height/10)+'px)';
+		}
+		else
+		{
+			object.style.transform = 'translate(0px,'+(view_height/10)+'px)';
+		}
 	}
 
 	// CANVAS FORMATTING
@@ -566,7 +574,7 @@
 		ctx.beginPath();
 	ctx.lineWidth = path_thickness*(levels*1.5)/meters_per_pixel;
 	ctx.arc(render_radius, render_radius, render_radius-ctx.lineWidth, 0, 2 * Math.PI, false);
-	ctx.fillStyle = "rgba(85, 107, 47, 0.9)";
+	ctx.fillStyle = "rgba(85,107,47,0.9)";
 	ctx.fill();
 	ctx.strokeStyle = 'MistyRose';
 	ctx.stroke();
@@ -1087,6 +1095,7 @@
 	var zoom_target = [];
 	var scrollbarWidth,scrollbarHeight;
 	var point;
+	var selected_point;
 
 	function updateViewDimensions()
 	{
@@ -1098,19 +1107,24 @@
 		{
 			document.documentElement.style.scrollBehavior = "smooth"; 
 			window.scroll(window.scrollX+selected_point.getBoundingClientRect().left+(selected_point.getBoundingClientRect().width-view_width)/2,window.scrollY+selected_point.getBoundingClientRect().top+(selected_point.getBoundingClientRect().height-view_height/2)/2);
-			document.documentElement.style.scrollBehavior = "auto";			
+			document.documentElement.style.scrollBehavior = "auto";
 		}
 		else
 		{
 			window.scroll(window.scrollX-zoom_target[0]*(new_view_width-view_width),window.scrollY-zoom_target[1]*(new_view_height-view_height));
 		}
-
+		if(selected_point)
+		{
+			location_pointer.style.left = (selected_point.getBoundingClientRect().left+selected_point.getBoundingClientRect().width/2+window.scrollX)+"px";
+			location_pointer.style.top = (selected_point.getBoundingClientRect().top+selected_point.getBoundingClientRect().height/2+window.scrollY)+"px";			
+		}
 		view_width = new_view_width;
 		view_height = new_view_height;
 		pixel_info.innerHTML = (1000/meters_per_pixel*devicePixelRatio).toFixed(0)+" pixels per kilometer<br>"+path_thickness+"x path thickness";
 	}
 
 	window.addEventListener('resize', function() {
+		center_all()
 		updateViewDimensions()
 	})
 
@@ -1149,7 +1163,7 @@
 			},1000);
 		img.src = 'Dodecagonal '+places[levels-1]+' ('+meters_per_pixel+','+path_thickness+').png';
 		setTimeout(function() {
-			window.scroll(render_radius*2-view_width/2,render_radius-view_height/10-(1-devicePixelRatio)*view_height/4);
+			window.scroll(render_radius-view_width/2,render_radius/10-view_height/4);
 
 			print_header();
 			print_welcome();
@@ -1172,9 +1186,9 @@
 			event.type == 'mouseup' ||
 			event.type == 'mousemove' ||
 			event.type == 'mouseover'||
-			event.type=='mouseout' ||
-			event.type=='mouseenter' ||
-			event.type=='mouseleave')
+			event.type == 'mouseout' ||
+			event.type == 'mouseenter' ||
+			event.type == 'mouseleave')
 		{
 			x = event.clientX;
 			y = event.clientY;
@@ -1192,7 +1206,7 @@
 		if(!loaded || out_of_bounds(event)) return;
 	}
 
-	document.onmousemove = function(event){ onmousemove_default(event) };
+	document.onmousemove = document.ontouchmove = function(event){ onmousemove_default(event) };
 
 	var mouse_down_X;
 	var mouse_down_Y;
@@ -1214,7 +1228,7 @@
 		}			
 	}
 
-	document.onmousedown = function(event) {
+	document.onmousedown = document.ontouchstart = function(event) {
 		updatePointer(event);
 		relX = relY = 0;
 		mouse_down_X = pointerX;
@@ -1239,7 +1253,7 @@
 			if(distanceBC < base_length(levels-1))
 			{
 				change_cornerB = true;
-				active_corner = cornerB;	
+				active_corner = cornerB;
 				relX = pointerX - getLocation(cornerB)[0];
 				relY = pointerY - getLocation(cornerB)[1];
 			}
@@ -1251,7 +1265,7 @@
 				relY = pointerY - getLocation(cornerA)[1];
 			}
 		}
-		document.onmousemove = function(event) {
+		document.onmousemove = document.ontouchmove = function(event) {
 			svgs.style.pointerEvents = "auto";
 			updatePointer(event);
 			if(select_history.length<2) return;
@@ -1265,8 +1279,8 @@
 				if(change_cornerA||change_cornerB)
 				{
 					window.scroll(init_scrollX+(pointerX-mouse_down_X)*Math.sqrt(devicePixelRatio)/1.75,init_scrollY+(pointerY-mouse_down_Y)*Math.sqrt(devicePixelRatio)/1.75);
-					render_route(event,change_cornerA,change_cornerB);	
-					document.onmouseup = function() {
+					render_route(event,change_cornerA,change_cornerB);
+					document.onmouseup = document.ontouchend = function() {
 						svgs.style.pointerEvents = "none";
 						updatePointer(event);
 						document.onmousemove = null;
@@ -1275,7 +1289,7 @@
 				}
 			}
 		}
-		document.onmouseup = function(event) {
+		document.onmouseup = document.ontouchend = function(event) {
 			updatePointer(event);
 			document.onmousemove = null;
 			if(out_of_bounds(event)) return;
@@ -1393,7 +1407,7 @@
 			else
 			{
 				var add_path = path2.slice(path2a,path2b+1)
-				path3 = path3.concat(add_path);					
+				path3 = path3.concat(add_path);
 			}
 		}
 		var path4 = path3.slice(0);
@@ -1425,9 +1439,9 @@
 			setMarker(cornerA,1,"green","black");
 			setMarker(cornerB,1,"red","black");
 		}
-		print_route(path4);	
+		print_route(path4);
 		current_time = new Date();
-		path=[];		
+		path=[];
 	}
 
 	function print_route(route)
@@ -1453,7 +1467,7 @@
 		var circle = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
 		var coords = getLocation(corner);
 		circle.setAttribute("id","point"+i);
-		circle.setAttribute("r",(0.25*lvl)+"vmin");
+		circle.setAttribute("r",(0.5*lvl)+"vmin");
 		circle.setAttribute("cx",render_radius+coords[0]);
 		circle.setAttribute("cy",render_radius+coords[1]);
 		circle.setAttribute("stroke",stroke_color?stroke_color:colors[lvl-1]);
@@ -1467,7 +1481,7 @@
 		highlight_circle.setAttribute("r",base_length(0.5+lvl)/meters_per_pixel);
 		highlight_circle.setAttribute("fill-opacity",0.03);
 		highlight_circle.setAttribute("class","drop_shadow");
-		svg_overlays[levels].appendChild(highlight_circle);			
+		svg_overlays[levels].appendChild(highlight_circle);
 		svg_overlays[0].appendChild(circle);
 		if(color=="red"||color=="green")
 		{
@@ -1560,7 +1574,7 @@
 		{
 			 print_to_log(seconds_to_get_on+" seconds for passengers boarding off");
 		}
-		var travel_text = "Travel "+(total_distance/1000).toFixed(3)+" kilometers in "+Math.floor(total_time)+"m "+('00'+((total_time*60)%60).toFixed(0)).slice(-2)+"s";
+		var travel_text = "Travel "+(total_distance/1000).toFixed(3)+" km in "+Math.floor(total_time)+"m "+('00'+((total_time*60)%60).toFixed(0)).slice(-2)+"s";
 		var departure_text = "Departure time "+departure_time.toLocaleTimeString();
 		var arrival_text = "Arrival time "+estimated_time.toLocaleTimeString();
 		print_to_log(travel_text);
