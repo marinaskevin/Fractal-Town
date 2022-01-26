@@ -1,0 +1,208 @@
+========
+LINES
+========
+
+yellow line	= Heavy Rail
+blue line	= Light Rail
+gray line	= Heavy EV
+brown line	= Light EV
+white line	= Sidewalk
+
+
+========
+COURT
+========
+
+1 court = 6 radial lines inside
+		a hexagon with 6 circumferential lines
+		with 12 radial lines connecting to
+		a dodecagon with 12 circumferential lines
+1 court = 36 white lines
+
+1 court = 6 triangles inside a hexagon
+		with 6 squares and 6 triangles on the outside
+		forming a dodecagon.
+
+-------------
+Court Summary
+-------------
+
+1 court	= A web of 6 squares and 12 triangles
+1 court	= 36 white lines
+
+
+========
+VILLAGE
+========
+
+1 village = 36 brown lines (in analogy to the court)
+
+1 village = 19 courts
+1 village = 19 courts each with 36 white lines by default
+			- 36 white lines that are shared by number of brown lines
+			+ 6 extra white squares with 4 lines each
+			+ 12 white lines between 12 courts on the town's outer periphery
+1 village = 19*36 - 36 + 6*4 + 12 = 684 white lines
+
+-------------
+Village Summary
+-------------
+
+1 village	= 19 courts
+1 village	= 36 brown lines
+			= 684 white lines
+
+
+========
+TOWN
+========
+
+1 town = 36 gray lines (in analogy to the court)
+
+1 town = 19 villages
+1 town = 19 villages each with 19 courts by default
+			- 36 courts that are shared by number of gray lines
+1 town = 19*19-36 courts = 325 courts
+
+1 town = 19 villages each with 36 brown lines by default
+			- 36 brown lines that are shared by number of gray lines
+			+ 6 extra brown squares with 4 lines each
+			+ 12 brown lines between 12 villages on the town's outer periphery
+1 town = 19*36 - 36 + 6*4 + 12 brown lines = 684 brown lines
+1 town = 325 courts each with 36 white lines by default
+			- 684 white lines that are shared by number of brown lines
+			+ 19 villages each with 6 extra white squares with 4 lines each
+			+ 60 white lines between 60 courts on the town's outer periphery
+1 town = 325*36 - 684 + 19*6*4 + 60 white lines = 11532 white lines
+
+-------------
+Town Summary
+-------------
+
+1 town	= 19 villages
+		= 325 courts
+1 town	= 36 gray lines
+		= 684 brown lines
+		= 11532 white lines
+
+
+========
+CITY
+========
+
+1 city = 19 towns
+
+1 city = 36 blue lines (in analogy to the court)
+1 city = 19 towns each with 19 villages by default
+			- 36 villages that are shared by number of blue lines
+1 city = 19*19-36 villages = 325 villages
+
+1 city = 19 towns each with 36 gray lines by default
+			- 36 gray lines that are shared by number of blue lines
+			+ 6 extra gray squares with 4 lines each
+			+ 12 gray lines between 12 towns on the city's outer periphery
+1 city = 19*36 - 36 + 6*4 + 12 gray lines = 684 gray lines
+1 city = 19 towns each with 325 courts by default
+			- 684 courts that are shared by number of gray lines
+1 city = 19*325 - 684 courts = 5491 courts
+
+1 city = 325 villages each with 36 brown lines by default
+			- 684 brown lines that are shared by number of gray lines
+			+ 19 towns each with 6 extra brown squares with 4 lines each
+			+ 60 brown lines between 60 villages on the city's outer periphery
+1 city = 325*36 - 684 + 19*6*4 + 60 brown lines = 11532 brown lines
+1 city = 5491 courts each with 36 white lines by default
+			- 11532 white lines that are shared by number of brown lines
+			+ 325 villages each with 6 extra white squares with 4 lines each
+			+ 252 white lines between 252 courts on the city's outer periphery
+1 city = 5491*36 - 11532 + 325*6*4 + 252 white lines = 194196 white lines
+
+-------------
+City Summary
+-------------
+
+1 city	= 19 towns
+		= 325 villages
+		= 5491 courts
+1 city	= 36 blue lines
+		= 684 gray lines
+		= 11532 brown lines
+		= 194196 white lines
+
+
+========
+METRO
+========
+
+1 metro = 19 cities
+
+1 metro = 36 yellow lines (in analogy to the court)
+1 metro = 19 cities each with 19 towns by default
+			- 36 towns that are shared by number of yellow lines
+1 metro = 19*19-36 towns = 325 towns
+
+1 metro = 19 cities each with 36 blue lines by default
+			- 36 blue lines that are shared by number of yellow lines
+			+ 6 extra blue squares with 4 lines each
+			+ 12 blue lines between 12 cities on the metro's outer periphery
+1 metro = 19*36 - 36 + 6*4 + 12 blue lines = 684 blue lines
+1 metro = 19 cities each with 325 villages by default
+			- 684 villages that are shared by number of blue lines
+1 metro = 19*325 - 684 villages = 5491 villages
+
+1 metro = 325 towns each with 36 gray lines by default
+			- 684 gray lines that are shared by number of blue lines
+			+ 19 cities each with 6 extra gray squares with 4 lines each
+			+ 60 gray lines between 60 towns on the metro's outer periphery
+1 metro = 325*36 - 684 + 19*6*4 + 60 gray lines = 11532 gray lines
+1 metro = 5491 villages each with 19 courts by default
+			- 11532 courts the are shared by number of gray lines
+1 metro = 5491*19 - 11532 = 92797 courts
+
+1 metro = 5491 villages each with 36 brown lines by default
+			- 11532 brown lines that are shared by number of gray lines
+			+ 325 towns each with 6 extra brown squares with 4 lines each
+			+ 252 brown lines between 252 villages on the metro's outer periphery
+1 metro = 5491*36 - 11532 + 325*6*4 + 252 = 194196 brown lines
+1 metro = 92797 villages each with 36 white lines by default
+			- 194196 white lines that are shared by number of brown lines
+			+ 5491 villages each with 6 extra brown squares with 4 lines each
+			+ 252 brown lines between 252 villages on the metro's outer periphery
+1 metro = 92797*36 - 194196 + 5491*6*4 + 1020 = 3279300 white lines
+
+-------------
+Metro Summary
+-------------
+
+1 metro	= 19 cities
+		= 325 towns
+		= 5491 villages
+		= 92797 courts
+1 metro	= 36 yellow lines
+		= 684 blue lines
+		= 11532 gray lines
+		= 194196 brown lines
+		= 3279300 white lines
+
+
+================
+PERIPHERIAL HUBS
+================
+
+Results:
+12  = 12 * 1 = 12 * (1)
+60  = 12 * 5 = 12 * (1 + 4)
+252 = 12 * 21 = 12 * (1 + 4 + 16)
+1020 = 12 * 85 = 12 * (1 + 4 + 16 + 64)
+4092 = 12 * 341 = 12 * (1 + 4 + 16 + 64 + 256)
+
+Key examples:
+
+brown lines on the city periphery
+252 = 6 * ( 4+2+2+4 + 4+4+2+2+4+4 + 10 )
+	= 6 * ( 1+4+1+2+1+2+1+4 + 1+4+1+4+1+2+1+2+1+4+1+4 ) 
+
+white lines on the city periphery
+1020 = 12 * ( ( 4+2+2+4+ 5 ) * 4 + 4*3 + 5 ) 
+
+

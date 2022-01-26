@@ -1,0 +1,1602 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>
+		FR△CT△L T□WN HTML5
+	</title>
+	<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.0.0-rc.5/dist/html2canvas.min.js"></script>
+</head>
+<style>
+* 
+	{
+		font-family: "Lucida Mono", "Monaco";
+		font-size: 1.8vmax;
+		line-height: 2.1vmax;
+	}
+	body
+	{
+		background-color: SteelBlue;
+		background-image: url("SkyWay Linear City in Abu Dhabi.jpg");
+		background-size: 100%;
+		/*background-repeat: no-repeat;*/
+		background-attachment: fixed;
+		background-position: 50% 0%; 
+		margin: 0;
+	}
+	canvas, svg, #canvases, #svgs, #map, #png_map
+	{
+		position: absolute;
+		left: 0;
+	}
+	svg
+	{
+		overflow: visible;
+		pointer-events: none;
+	}
+	#map_info
+	{
+		position: fixed;
+		top: 0;
+		width: 100vw;
+		left: 0vw;
+		color: white;
+		text-align: center;
+	}
+	#links
+	{
+		background-color: rgba(255,255,0,0.8);
+		position: fixed;
+		right: 0;
+		bottom: 5vh;
+		padding: 1vmax;
+		border-radius: 1.5vmax 0px 0px 1.5vmax;
+	}
+	#logger
+	{
+    	-webkit-mask-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.00,rgba(0,0,0,0)), color-stop(0.05,rgba(0,0,0,1)),color-stop(0.95,rgba(0,0,0,1)),color-stop(1.00,rgba(0,0,0,0)));				
+		opacity: 1;
+		background-color: rgba(255,255,255,1);
+		color: black;
+		position: fixed;
+		width: 58vw;
+		height: 40vh;
+		left: 5vw;
+		font-size: 0.8vh;
+		bottom: 2vh;
+		padding: 1vh;
+		overflow: auto;
+		border-radius: 1.5vmax 1.5vmax 0px 0px;
+	}
+	#loading_message
+	{
+		background-color: black;
+		opacity: 1;
+		position: fixed;
+		width: 60vw;
+		top: 40vh;
+		left: 20vw;
+		justify-content: center;
+		align-content: center;
+		text-align: center;
+		font-size: calc(5vh);
+		color: white;
+		padding: 3vh;
+		border-radius: 1.5vmax;
+		pointer-events: none;
+	}
+	#summary
+	{
+    	-webkit-mask-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.00,rgba(0,0,0,0)), color-stop(0.05,rgba(0,0,0,1)),color-stop(0.95,rgba(0,0,0,1)),color-stop(1.00,rgba(0,0,0,0)));				
+		background-color: rgba(255,255,255,0.8);
+		position: fixed;
+		height: 33vh;
+		width: 30vw;
+		left: 65vw;
+		bottom: 2vh;
+		padding: 2.5vh;
+		text-align: center;
+		color: black;
+		border-radius: 1.5vmax;
+	}
+	#zoom_info
+	{
+		background-color: black;
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		width: 100vw;
+		text-align: center;
+		color: white;
+	}
+	#spacer
+	{
+		position: absolute;
+		min-width: 100vw;
+	}
+	#location_pointer
+	{
+		display: none;
+		margin-top: -0.6vh;
+		line-height: 0vh;
+		position: absolute;
+		color: red;
+		font-size: 5vmax;
+		justify-content: center;
+		align-items: center;
+		pointer-events: none;
+	}
+	div
+	{
+		padding: 0.2vw;
+	}
+	table
+	{
+		border: 1;
+	}
+	th, td
+	{
+		align: right;
+	}
+	a
+	{
+		white-space: nowrap;
+		color: blue;
+		text-decoration: underline dotted;
+	}
+	a:hover
+	{
+		background-color: white;
+	}
+	a:active
+	{
+		background-color: cyan;
+	}
+	br
+	{
+		margin: 0.1vmax;
+	}
+	svg
+	{
+		pointer-events: none;
+	}
+	table
+	{
+		border-collapse: collapse;
+		border-spacing: 0;
+   }
+	.green_selector, .red_selector
+	{
+		pointer-events: fill;
+	}
+	.green_selector:hover, .red_selector:hover
+	{
+		stroke-color: "yellow";
+		z-index: 10;
+	}
+	.start_icon,.via_icon,.end_icon
+	{
+		display: inline-block;
+		background-repeat: no-repeat;
+		background-position: center bottom;
+		width: 1vmax;
+		height: 1vmax;
+		overflow: visible;
+	}
+	.start_icon
+	{
+		background-image: 
+        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100%' height='100%' viewBox='-30 -30 60 60'><circle r='20' stroke='black' stroke-width='6' fill='green' opacity='0.9'></circle></svg>");
+	}
+	.via_icon
+	{
+		background-image: 
+        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100%' height='100%' viewBox='-30 -30 60 60'><circle r='20' stroke='black' stroke-width='6' fill='yellow' opacity='0.9'></circle></svg>");
+	}
+	.end_icon
+	{
+		background-image: 
+        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100%' height='100%' viewBox='-30 -30 60 60'><circle r='20' stroke='black' stroke-width='6' fill='red' opacity='0.9'></circle></svg>");
+	}
+	.no_prerender
+	{
+		color: gray;
+	}
+	.drop_shadow
+	{
+		-webkit-filter: drop-shadow( 0.2vmax 0.2vmax 0.1vmax rgba(0, 0, 0, .9));
+		filter: drop-shadow( 0.2vmax 0.2vmax 0.1vmax rgba(0, 0, 0, .9))
+	}
+	.fadein
+	{
+    -webkit-animation: fadein 3s; /* Safari, Chrome and Opera > 12.1 */
+       -moz-animation: fadein 3s; /* Firefox < 16 */
+        -ms-animation: fadein 3s; /* Internet Explorer */
+         -o-animation: fadein 3s; /* Opera < 12.1 */
+            animation: fadein 3s;		
+	}
+
+	@keyframes fadein {
+    	from { opacity: 0; }
+    	to   { opacity: 1; }
+	}
+
+	/* Firefox < 16 */
+	@-moz-keyframes fadein {
+	    from { opacity: 0; }
+	    to   { opacity: 1; }
+	}
+
+	/* Safari, Chrome and Opera > 12.1 */
+	@-webkit-keyframes fadein {
+	    from { opacity: 0; }
+	    to   { opacity: 1; }
+	}
+
+	/* Internet Explorer */
+	@-ms-keyframes fadein {
+	    from { opacity: 0; }
+	    to   { opacity: 1; }
+	}
+
+	/* Opera < 12.1 */
+	@-o-keyframes fadein {
+	    from { opacity: 0; }
+	    to   { opacity: 1; }
+	}
+
+</style>
+<body>
+	<div id="spacer"></div>
+	<div id="canvases">
+		<canvas id="canvas" class="fadein"></canvas>
+		<canvas id="canvas1"></canvas>
+		<canvas id="canvas2"></canvas>
+		<canvas id="canvas3"></canvas>
+		<canvas id="canvas4"></canvas>
+		<canvas id="canvas5"></canvas>
+		<canvas id="canvas_img"></canvas>
+	</div>
+	<img id="png_map" class="fadein">
+	<div id="svgs">
+		<svg id="svg_overlay5" xmlns="http://www.w3.org/2000/svg"></svg>
+		<svg id="svg_overlay4" xmlns="http://www.w3.org/2000/svg"></svg>
+		<svg id="svg_overlay3" xmlns="http://www.w3.org/2000/svg"></svg>
+		<svg id="svg_overlay2" xmlns="http://www.w3.org/2000/svg"></svg>
+		<svg id="svg_overlay1" xmlns="http://www.w3.org/2000/svg"></svg>
+		<svg id="svg_overlay0" xmlns="http://www.w3.org/2000/svg"></svg>
+	</div>
+	<div id="logger"></div>
+	<div id="summary"><h1>Welcome!</h1></div>
+	<div id="zoom_info">To zoom, use the CTRL key+scroll wheel, or use touch.</div>
+	<div id="links">
+			Map<br>
+			<a href="?levels=1&meters_per_pixel=1&path_thickness=2" title="1 meter per pixel&#013;2x path thickness">Court</a><br>
+			<a href="?levels=2&meters_per_pixel=1&path_thickness=2" title="1 meter per pixel&#013;2x path thickness">Village</a><br>
+			<a href="?levels=3&meters_per_pixel=1&path_thickness=2" title="1 meter per pixel&#013;2x path thickness">Town</a><br>
+			<a href="?levels=4&meters_per_pixel=2&path_thickness=2" title="2 meters per pixel&#013;2x path thickness">City</a><br>
+			<a href="?levels=5&meters_per_pixel=5&path_thickness=3" title="5 meters per pixel&#013;3x path thickness">Metro</a>
+	</div>
+	<div id="map_info" class="drop_shadow"></div>
+	<div id="location_pointer" class="drop_shadow">←</div>
+	<div id="loading_message"></div>
+	<script>
+
+	var allow_print = true;
+
+	function print_to_log(message,bgcolor="none",color="black")
+	{
+		if(!allow_print) return;
+		var new_string;
+		if (typeof message == 'object') {
+			new_string = (JSON && JSON.stringify ? JSON.stringify(message) : message);
+		} else {
+			new_string = message;
+		}
+		if(bgcolor=="none"&&message!="<hr>")
+		{
+			logger.innerHTML += `<div style="background-color: `+bgcolor+`; color: `+color+`; padding-left: 3vmax">`+new_string+`</div>`;
+		}
+		else
+		{
+			logger.innerHTML += `<div style="background-color: `+bgcolor+`; color: `+color+`">`+new_string+`</div>`;
+		}
+		// console.log(message);
+	}
+
+		// FRACTAL TOWN MODEL VARIABLES
+
+	function calculateTOP_KPH(levels)
+	{
+		var top_kph = [];
+		for(var i=0;i<levels;i++)
+		{
+			var a = 1/(acceleration*(3600 * 3600 / 1000));
+			var b = station_wait_times[i]/3600 - segment_times[i]/60;
+			var c = base_length(i+1)/1000;
+			top_kph.push((0 - b - Math.sqrt(b*b-4*a*c))/(2*a));
+		}
+		return top_kph;
+	}
+
+	function calculateRunways(levels)
+	{
+		var top_speeds= calculateTOP_KPH(levels);
+		var runways = [];
+		for(var i=0;i<levels;i++)
+		{
+			runways.push(0.5 * (top_speeds[i]*1000/3600) * (top_speeds[i]*1000/3600) / acceleration);
+		}
+		return runways;
+	}
+
+	function angle(cornerA,cornerB)
+	{
+		var locationA = getLocation(cornerA);
+		var locationB = getLocation(cornerB);
+		var angle = Math.atan2(locationB[1]-locationA[1],locationB[0]-locationA[0]);
+		return angle;
+	}
+
+	function roundDigits(number,digits)
+	{
+		return Math.round(number*Math.pow(10,digits))/Math.pow(10,digits);
+	}
+
+	function cardinal_direction(cornerA,cornerB)
+	{
+		var degrees = angle(cornerA,cornerB) * 360 / (2 * Math.PI);
+		degrees = (Math.round(degrees) + 360) % 360;
+		return cardinal_directions[degrees/30];
+	}
+
+	function geometric_sum(factor,lvl)
+	{
+		var sum = 0;
+		for(var i=0;i<lvl;i++)
+		{
+			sum += Math.pow(factor,i)
+		}
+		return sum;
+	}
+
+	var data = { meters_per_pixel: 2.5, levels: 3, path_thickness: 2 };
+
+	if(location.href.split('?').length>1)
+	{
+		var params = location.href.split('#')[0].split('?')[1].split('&');
+		for (x in params)
+		{
+			data[params[x].split('=')[0]] = params[x].split('=')[1];
+		}
+	}
+
+	const levels=Math.floor(data["levels"]);
+
+	const meters_per_pixel=data["meters_per_pixel"];
+	const path_thickness=Number(data["path_thickness"]);
+	document.title = "Level "+levels+" FR△CT△L T□WN (HTML5)";
+
+	const s = 2+Math.sqrt(3);
+	const block_width = 50;
+
+	const system_width = base_length(levels+1);
+	const system_px_width = system_width/meters_per_pixel
+	const render_radius = system_px_width/2 * Math.sqrt(1+1/Math.pow(s,2)) * (s/(s-1));
+	document.getElementById("spacer").style.minWidth = "calc("+(render_radius*4)+"px)";
+	document.getElementById("spacer").style.minHeight = "calc("+(render_radius*4)+"px)";
+	const d60 = 60/360 * 2*Math.PI
+	const colors = ["Khaki","LightSalmon","LightGray","SkyBlue","Gold"];
+	const vehicles = ["Sidewalk","Light EV","Heavy EV","Light Rail","Heavy Rail"];
+	const places = ["Court","Village","Town","City","Metropolis"];
+	const station_wait_times = [0,24,24,24,24]; // seconds
+	const segment_times = [1,1,1.5,3,6]; // minutes
+	const acceleration = 0.7; // m/s^2
+	const top_kph = calculateTOP_KPH(levels);
+	const runways = calculateRunways(levels);
+	const cardinal_directions = ["E","E-SE","S-SE","S","S-SW","W-SW","W","W-NW","N-NW","N","N-NE","E-NE"];
+
+	const descriptions = 
+	[
+		`	Rendering a hub`
+		,
+		`	Rendering 19 hubs`
+		,
+		`	Rendering 325 hubs`
+		,
+		`	Rendering 5491 hubs`
+		,	
+		`	Rendering 92797 hubs`
+
+	];
+
+	loading_message.innerHTML += '<span>'+descriptions[levels-1]+'<span>';
+
+	const total_width = 2 * block_width * Math.sqrt(s) * geometric_sum(s,levels);
+	var distance_label = "";
+	if(total_width > 1000)
+	{
+		distance_label = (total_width/1000).toFixed(1)+'-km across';
+	}
+	else
+	{
+		distance_label = total_width.toFixed(0)+'-meters across';
+	}
+
+	if(levels>1)
+	{
+		map_info.innerHTML = "19-"+places[levels-2]+", "+(segment_times.slice(0,levels).reduce((a, b) => a + b, 0)*4)+"-minute "+places[levels-1]+" ("+distance_label+`)<br><span id="pixel_info">`+(1000/meters_per_pixel*devicePixelRatio).toFixed(0)+" pixels per kilometer<br>"+path_thickness+"x path thickness</span>";
+	}
+	else
+	{
+		map_info.innerHTML = "36-Lot, "+segment_times[0]*4+"-minute "+places[levels-1]+" ("+distance_label+`)<br><span id="pixel_info">`+(1000/meters_per_pixel*devicePixelRatio).toFixed(0)+" pixels per kilometer<br>"+path_thickness+"x path thickness</span>";
+	}
+
+	function print_welcome()
+	{
+		print_to_log("To create a route, click on the map to set two points.");
+		print_to_log("You can also drag the endpoints.");
+	}
+
+	function print_header()
+	{
+		if(levels>=1) print_to_log(`▢&△ with `+base_length(1).toFixed(0)+`-meter `+vehicles[0]+`s`,`Khaki`);
+		if(levels>=2) print_to_log(`▢&△ with `+base_length(2).toFixed(0)+`-meter `+vehicles[1]+` paths`,`LightSalmon`);
+		if(levels>=3) print_to_log(`▢&△ with `+base_length(3).toFixed(0)+`-meter `+vehicles[2]+` paths`,`LightGray`);
+		if(levels>=4) print_to_log(`▢&△ with `+(base_length(4)/1000).toFixed(1)+`-km `+vehicles[3]+` paths`,`SkyBlue`);
+		if(levels>=5) print_to_log(`▢&△ with `+(base_length(5)/1000).toFixed(1)+`-km `+vehicles[4]+` paths`,`Gold`);
+		if(levels>=5) print_to_log(`<small>6▢ + 12△ `+vehicles[4]+` system width for metropolis = `+(base_length(6)/1000).toFixed(1)+` kilometers across</small>`,`Gold`);
+	}
+	// □2 = 6□ + 12△ + 1✧ = 7□ + 16△ + 0✧
+	// ((6+1) + (12+4)*sin(60 degrees)/2)/(2+sqrt(3))^2
+	// △2 = 3□ + 7△ + 0✧ = 3□ + 7△
+	// (3/(sin(60 degrees)/2) + 7)/(2+sqrt(3))^2
+	// ◯2 = 6□2 + 12△2 = 6(7□ + 16△) + 12(3□ + 7△) = (42□ + 96△) + (36□ + 84△) = 78□ + 180△ ~ 123□
+	// (78 + 180*cos(60 degrees)/2))/(6(7 + 16*cos(60 degrees)/2) + 12(3 + 7*cos(60 degrees)/2))
+	// ✧2 = 18□ + 40△ + 1✧ = 19□ + 44△ + 0✧
+	// ((18+1) + (40+4)*sin(60 degrees)/2)/((1 + 4*sin(60 degrees)/2))/(2+sqrt(3))^2
+	// □3 = 7□2 + 16△2 = 7(7□ + 16△) + 16(3□ + 7△) = (49□ + 112△) + (48□ + 112△) = 97□ + 224△
+	// (97+224*sin(60 degrees)/2)/(2+sqrt(3))^4
+	// △3 = 3□2 + 7△2 = 3(7□ + 16△) + 7(3□ + 7△) = (21□ + 48△) + (21□ + 49△) = 42□ + 97△
+	// (42/(sin(60 degrees)/2)+97)/(2+sqrt(3))^4
+	// □4 = 7□3 + 16△3 = 7(97□ + 224△) + 16(42□ + 97△) = 679□ + 1568△ + 672□ + 1552△ = 1351□ + 3120△
+	// (1351+3120*sin(60 degrees)/2)/(2+sqrt(3))^6
+	// △4 = 3□3 + 7△3 = 3(97□ + 224△) + 7(42□ + 97△) = 291□ + 672△ + 294□ + 679△ = 585□ + 1351△
+	// (585/(sin(60 degrees)/2)+1351)/(2+sqrt(3))^6
+	// □5 = 7□4 + 16△4 = 7(1351□ + 3120△) + 16(585□ + 1351△) = 9457□ + 21840△ + 9360□ + 21616△ = 18817□ + 43456△
+	// (18817+43456*sin(60 degrees)/2)/(2+sqrt(3))^8
+	// △5 = 3□4 + 7△4 = 3(1351□ + 3120△) + 7(585□ + 1351△) = 4053□ + 9360△ + 4095□ + 9457△ = 8148□ + 18817△
+	// (8148/(sin(60 degrees)/2)+18817)/(2+sqrt(3))^8
+	// ◯5 = 6□5 + 12△5 = 6(18817□ + 43456△) + 12(8148□ + 18817△) = 112902□ + 260736△ + 97776□ + 225804△ = 210678□ + 486540△ ~ 1053.39 square kilometers
+	// (210678 + 486540*sin(60 degrees)/2))/(6(7 + 16*sin(60 degrees)/2) + 12(3 + 7*sin(60 degrees)/2))/(2+sqrt(3))^6
+
+	// MOUSE VARIABLES
+
+	var pointerX = -1;
+	var pointerY = -1;
+	var select_history = [];
+
+	// FORMATTING
+
+	function center(object)
+	{
+		object.style.transform = 'translate('+render_radius+'px,'+render_radius+'px)';
+	}
+
+	// CANVAS FORMATTING
+
+		const canvas = document.getElementById('canvas');
+		var cnvs = [];
+		var ctxs = [];
+		var ctx;
+		var bitmap_ctx;
+
+		function add_canvas(name)
+		{
+			var canvas = document.getElementById(name);
+			var ctx = canvas.getContext('2d');
+			cnvs.push(canvas);
+			ctxs.push(ctx);
+
+			canvas.width = render_radius*2;
+			canvas.height = render_radius*2;
+			return ctx;
+		}
+
+		ctx = add_canvas("canvas");
+
+		for(var i=1; i<=levels; i++)
+		{
+			add_canvas('canvas'+i);
+		}
+
+		bitmap_ctx = add_canvas('canvas_img');
+
+		function center_canvases()
+		{
+			for(i in cnvs)
+			{
+				center(cnvs[i]);
+			}
+		}
+
+		center_canvases();
+
+	// SVG FORMATTING
+
+		var svg_overlays = [];
+
+		for(var i=0; i<=levels;i++)
+		{
+			var svg_overlay = document.getElementById('svg_overlay'+i);
+			svg_overlay.setAttribute("width",canvas.width)
+			svg_overlay.setAttribute("height",canvas.height)
+			center(svg_overlay);
+			svg_overlays.push(svg_overlay);
+		}
+
+		function center_svgs()
+		{
+			for(i in svg_overlays)
+			{
+				center(svg_overlays[i]);
+			}
+		}
+
+		function center_all()
+		{
+			center_canvases();
+			center_svgs();
+			center(png_map);
+		}
+
+	// INITIAL RENDERING
+
+	var coords;
+	setCoords();
+
+	makeIsland();
+
+	function makeIsland(ctx = get_ctx(0))
+	{
+		// This creates a circular background on the the canvas "canvas"
+		ctx.beginPath();
+	ctx.lineWidth = path_thickness*(levels*1.5)/meters_per_pixel;
+	ctx.arc(render_radius, render_radius, render_radius-ctx.lineWidth, 0, 2 * Math.PI, false);
+	ctx.fillStyle = "rgba(85, 107, 47, 0.9)";
+	ctx.fill();
+	ctx.strokeStyle = 'MistyRose';
+	ctx.stroke();
+	}
+
+	function dodecagon(ctx, xCenter, yCenter, len, lvl, isHub=0, periphery, tilt=0)
+	{
+		// This self-referencing function recursively draws all the paths within FRACTAL TOWN
+
+		if(lvl==0) return;
+
+		var r = (len*(s-1))/2;
+		try
+		{
+			ctx_translate(xCenter,yCenter);
+		}
+		catch
+		{
+			var meter_s = " meter ";
+			if(meters_per_pixel>1) meter_s = " meters ";
+			logger.innerHTML="";
+			print_to_log("<center>More memory is required to display</center>","cyan","red");
+			print_to_log("<center>a level "+levels+" map ("+places[levels-1]+")</center>","cyan","red");
+			print_to_log("<center>with "+meters_per_pixel+meter_s+"per pixel resolution.</center>","cyan","red");
+			print_to_log("<center>To fix this you can:</center>","cyan","red");
+			print_to_log("<center>Reduce the map level ↑</center>","cyan","red")
+			print_to_log("<center>increase the meters per pixel →</center>","cyan","red")
+			print_to_log("<center>or both ⤴.</center>","cyan","red");
+			allow_print = false;
+			return;
+		}
+		dodecagon(get_ctx(lvl-1),0,0,len/(s),lvl-1, lvl < isHub ? isHub : lvl);
+
+		ctx_save();
+
+			ctx.strokeStyle = colors[lvl-1];
+			ctx.lineWidth = path_thickness*(lvl*1.5)/meters_per_pixel;
+			for(var i=0;i<6;i++)
+			{
+				ctx.beginPath();
+				ctx.moveTo(0,0);
+				var angle = i*d60+d60/2;
+				ctx.lineTo(len*Math.cos(angle),len*Math.sin(angle));
+				ctx.closePath();
+				ctx.stroke();
+			}				
+			var dodecagon_radius = Math.sqrt(Math.pow((len*s/2),2)+Math.pow((len/2),2));
+			ctx.beginPath();
+			ctx.moveTo(len*s/2,len/2);
+			for(var i=0;i<12;i++)
+			{
+				var angle = (i/2)*d60+d60/4;
+				ctx.lineTo(dodecagon_radius*Math.cos(angle),dodecagon_radius*Math.sin(angle));
+			}
+			ctx.closePath();
+			ctx.stroke();
+
+		ctx_restore();
+
+		for(var i=0; i<6; i++)
+		{
+			// This for-loop iterates through the squares comprising a dodecagon
+
+			ctx_save();
+
+				// The canvas context is transformed to the square to be iterated through
+				var angle = i*d60
+				var x = r*Math.cos(angle);
+				var y = r*Math.sin(angle);
+				ctx_translate(x,y);
+				ctx_rotate(angle);
+				ctx_translate(-len/2,-len/2);
+
+				// The lines used to draw the squares are colored and thickened according the Fractal Level being rendered
+				ctx.strokeStyle = colors[lvl-1];
+				ctx.lineWidth = path_thickness*(lvl*1.5)/meters_per_pixel;
+
+				// When iterating on level 1 of fractal town, buildings and grounds are rendered with colors corresponding to the hierachy.
+				if(lvl==1)
+				{
+					var ctx_g = get_ctx(0);
+
+					// The default ground color is ForestGreen.
+					ctx_g.fillStyle = "ForestGreen";
+
+					// Sets village hub ground color to CadetBlue
+					if(isHub==2)
+					{
+						ctx_g.fillStyle = "CadetBlue";
+					}
+
+					// Sets town hub ground color to SteelBlue
+					if(isHub==3)
+					{
+						ctx_g.fillStyle = "SteelBlue";
+					}
+
+					// Sets city hub ground color to DarkOrange
+					if(isHub>3)
+					{
+						ctx_g.fillStyle = "DarkOrange";
+					}
+
+					// Colors the ground without covering the paths
+					ctx_g.fillRect(0,1,len,len/2-2);
+					ctx_g.fillRect(0,len/2+1,len,len/2-2);
+
+					// Sets the roof color to DarkSlateGrey
+					ctx_g.fillStyle = "DarkSlateGrey";
+
+					// Draws six buildings within a block
+					ctx_g.fillRect(1,0,len/3-2,len/2-4);
+					ctx_g.fillRect(len/3+1,0,len/3-2,len/2-4);
+					ctx_g.fillRect(len*2/3+1,0,len/3-2,len/2-4);
+					ctx_g.fillRect(1,len/2+3,len/3-2,len/2-4);
+					ctx_g.fillRect(len/3+1,len/2+3,len/3-2,len/2-4);
+					ctx_g.fillRect(len*2/3+1,len/2+3,len/3-2,len/2-4);
+				}
+
+				// Draws the square at the selected canvas context
+				ctx.strokeRect(0,0,len,len);
+
+				for(var j=1;j<lvl;j++)
+				{
+					var ctx_j = get_ctx(lvl-j);
+					ctx_j.strokeStyle = colors[lvl-j-1];
+					ctx_j.lineWidth = path_thickness*((lvl-j-1+1)*1.5)/meters_per_pixel;
+					ctx_j.beginPath();
+					ctx_j.moveTo(len*(1+(s-Math.pow(1/s,j-1))/(2*s)),len*(s-Math.pow(1/s,j-1))/(2*s));
+					ctx_j.lineTo(len*(1+(s-Math.pow(1/s,j-1))/(2*s)),len*(s+Math.pow(1/s,j-1))/(2*s));
+					ctx_j.stroke();
+					var scale_k = 0;
+					for(var k=0;k<lvl-j;k++)
+					{
+						var ctx_k = get_ctx(lvl-k-1);
+						ctx_k.strokeStyle = colors[lvl-k-2];
+						ctx_k.lineWidth = path_thickness*((lvl-k-2+1)*1.5)/meters_per_pixel;
+						ctx_k.moveTo(len*(1+scale_k/2),len*(1+scale_k/2-s)/s);
+						ctx_k.lineTo(len*(1+(1+scale_k)/(2*s)),-1*(1+scale_k)*len/2);
+						scale_k = (1+scale_k)/s;
+					}
+					ctx_k.stroke();
+				}
+
+				var slvl = lvl-1;
+
+				while(slvl>0)
+				{
+					var ctx_sq = get_ctx(slvl);
+					// Draws a descendant square centered within the parent square
+					ctx_sq.lineWidth = path_thickness*(slvl*1.5)/meters_per_pixel;
+					ctx_sq.strokeStyle = colors[slvl-1];
+					var ss = Math.pow(s,slvl-lvl+1);
+					ctx_sq.strokeRect(len*(s-ss)/(2*s),len*(s-ss)/(2*s),len*ss/s,len*ss/s)
+					slvl--;
+				}
+
+				// Draws a decendant dodecagon centered on a corner of the square that meets with a corner of a sibiling hexagon
+				dodecagon(get_ctx(lvl-1),0,0,len/(s),lvl-1,false,false,true);
+				ctx_translate(len,0);
+
+				// Draws two decendant dodecagons each centered a corner of the square that meets with a corner of its parent dodecagon
+				dodecagon(get_ctx(lvl-1),0,0,len/(s),lvl-1,false,true,false);
+				ctx_translate(0,len);
+				dodecagon(get_ctx(lvl-1),0,0,len/(s),lvl-1,false,true,true);
+				// ctx_translate(-len/2-x,-len/2-y);
+
+			ctx_restore();
+		}
+	}
+
+	// LOCATION FUNCTIONS
+
+	function base_length(lvl)
+	{
+		// Returns a basis length for a given level within FRACTAL TOWN
+		return block_width*Math.pow(s,lvl-1);
+	}
+
+	function basis_vector(sides,corner,multiply=1)
+	{
+		// Returns a basis vector for a given corner of a defined regular polygon
+		var angle=2*Math.PI*(-(corner-1/2)/sides)
+		return [Math.cos(angle)*multiply,Math.sin(angle)*multiply];
+	}
+
+	function setCoords()
+	{
+		coords = [[0,0]];
+
+		// Creates basis vectors for regular hexagons
+		for(var i=1;i<=6;i++)
+		{
+			coords.push(basis_vector(6,i));
+		}
+
+		// Creates basis vectors for regular decagons
+		for(var i=1;i<=12;i++)
+		{
+			coords.push(basis_vector(12,i,Math.sqrt(s*s+1)/2));
+		}
+	}
+
+	function getHubCoords(lvl,hub)
+	{
+		// Returns the x,y pixel coordinates of the hub relative to the center of its parent hub
+		if(hub < 0) return;
+		var x = base_length(lvl)/meters_per_pixel*coords[hub][0];
+		var y = base_length(lvl)/meters_per_pixel*coords[hub][1];
+		return [x,y];
+	}
+
+	function getLocation(location)
+	{
+		// Returns the x,y pixel coordinates of the hub relative to the center of the canvas
+		var x = 0;
+		var y = 0;
+		location = [].concat(location);
+		for(var i=levels-location.length+1;i<=levels;i++)
+		{
+			var hub = Math.floor(location.pop());
+			if(hub<0)
+			{
+				return getLocation(nearest(location));
+			}
+			var coords = getHubCoords(i,hub);
+			x += coords[0];
+			y += coords[1];
+		}
+		return [x,y];
+	}
+
+	function nearest(pointer = [pointerX,pointerY],lowestLevel=1,x=0,y=0,lvl=levels)
+	{
+		// Returns array of numbers corresponding a chain of descendant hubs
+		if(lvl<lowestLevel) return [];
+		var relX = (pointer[0]-x)*meters_per_pixel;
+		var relY = (pointer[1]-y)*meters_per_pixel;
+		var rel = Math.sqrt(relX*relX+relY*relY);
+		if(lvl==1 && rel-base_length(2)/2 > base_length(1)/2)
+		{
+			return [-1];
+		}
+		var r_min = base_length(lvl+1);
+		var closestHub = 0;
+		for(var i=0;i<19;i++)
+		{
+			var xHub=base_length(lvl)*coords[i][0];
+			var yHub=base_length(lvl)*coords[i][1];
+			var r = Math.sqrt(Math.pow(xHub-relX,2)+Math.pow(yHub-relY,2));
+			if(r<r_min && r>0)
+			{
+				closestHub = i;
+				r_min=r;
+			}
+		}
+		var hubCoords = getHubCoords(lvl,closestHub);
+		var nearestHub = [closestHub].concat(nearest(pointer,lowestLevel,x+hubCoords[0],y+hubCoords[1],lvl-1));
+		if(nearestHub[nearestHub.length-1]<0) nearestHub.pop();
+		return nearestHub;
+	}
+
+	// ROUTE SOLVER
+
+	var total_distance = 0;
+	var total_time = 0;
+	var path = [];
+	var current_time = new Date();
+
+	function getCornerA()
+	{
+		if(select_history.length<1) return;
+		if(select_history.length==1) return nearest(select_history[0]);
+		return nearest(select_history[select_history.length-2]);
+	}
+
+	function getCornerB()
+	{
+		if(select_history.length<2) return;
+		return nearest(select_history[select_history.length-1]);
+	}
+
+	function path_finder(cornerA=[],cornerB=[],previous_corner=[])
+	{
+		if(cornerA.includes(-1) || cornerB.includes(-1) || previous_corner.includes(-1)) return;
+		if(select_history.length<2) return;
+		if(cornerA.length==0 || cornerB.length==0)
+		{
+			cornerA = getCornerA();
+			cornerB = getCornerB();
+		}
+		var locationA = getLocation(cornerA);
+		var locationB = getLocation(cornerB);
+		var distanceAB = distance(cornerA,cornerB);
+		var levelA= getLevel(cornerA);
+		var levelB = getLevel(cornerB);
+		while(cornerA.length>levels-levelA+1)
+		{
+			cornerA.pop();
+		}
+		while(cornerB.length>levels-levelB+1)
+		{
+			cornerB.pop();
+		}
+		var levelAB = Math.floor(Math.log(distanceAB/block_width)/Math.log(s))+1;
+
+		if(previous_corner.length==0)
+		{
+			path = [];
+			path.push(cornerA);
+		}
+		if(distanceAB == 0 || levelAB<0)
+		{
+			total_distance = 0;
+			total_time	= 0;
+			return;
+		}
+
+		var equivalentCornerA = seekEquivalent(cornerA,cornerB);
+
+		if(equivalentCornerA)
+		{
+			var originalHub = cornerA.slice(0,cornerA.length-1);
+			var alternativeHub = equivalentCornerA.slice(0,equivalentCornerA.length-1);
+			var oHubDistance = distance(originalHub,cornerB);
+			var aHubDistance = distance(alternativeHub,cornerB);
+			if(aHubDistance<oHubDistance)
+			{
+				cornerA = equivalentCornerA;
+			}
+		}
+
+		var levelC = levelAB < levelA ? levelAB : levelA;
+		if(levelC==0)
+		{
+			levelC++;
+		}
+		var cornerC = trace(cornerA,cornerB,levelC,previous_corner);
+		var locationC = getLocation(cornerC);
+
+		var levelD = levelA <= levelAB+1 ? levelA : levelAB+1;
+		var cornerD = trace(cornerA,cornerB,levelD,previous_corner);
+		var locationD = getLocation(cornerD);
+
+		var interhub = cornerB.slice(0,cornerA.length+1);
+		if(distance(cornerD,interhub)/base_length(levelC)<=Math.sqrt(s-1)&&distance(cornerA,cornerC)<distance(cornerA,cornerD))
+		{
+			cornerC = cornerD;
+			locationC = locationD;
+			levelC = levelD;
+		}
+		else if(distanceAB > base_length(levelC+1))
+		{
+			var index_A = cornerA[cornerA.length-1];
+			if(index_A>=0&&index_A<7)
+			{
+				cornerC = [].concat(cornerA);
+				cornerC[cornerC.length-1] = 0;
+			}
+			if(index_A>6)
+			{
+				var inner_corner = [].concat(cornerA);
+				inner_corner[inner_corner.length-1] = (index_A+index_A%2-6)/2;
+				var inner_ring_to_destination = distance(inner_corner,cornerB);
+				var default_to_destination = distance(cornerC,cornerB);
+				cornerC = inner_corner;
+			}
+		}
+
+		path.push(cornerC);
+		path_finder(cornerC,cornerB,cornerA);
+	}
+
+	function trace(cornerA,cornerB,lvl,previous_corner=[])
+	{
+		if(	!(cornerA && cornerB &&
+			cornerA.length <= levels &&
+			cornerB.length <= levels) ) return;
+
+		if(lvl < 1) return;
+
+		if(previous_corner.length < 1)
+		{
+			previous_corner = cornerA;
+		}
+
+		var move_distance = base_length(lvl);
+		var canvas_px_sample_dist = move_distance/Math.sqrt(2)/meters_per_pixel;
+
+		var locationA = getLocation(cornerA);
+		var locationB = getLocation(cornerB);
+		var locationC;
+
+		var distanceX = (locationB[0] - locationA[0])*meters_per_pixel;
+		var distanceY = (locationB[1] - locationA[1])*meters_per_pixel;
+		var angle = Math.atan2(distanceY,distanceX);
+		var angle_shift = 0;
+		var angle_sign = -1;
+
+		var cornerC;
+
+		var i=0;
+		do
+		{
+			locationC = locationA.slice(0);
+			locationC[0] += Math.cos(angle+10/100+angle_shift*angle_sign)*canvas_px_sample_dist;
+			locationC[1] += Math.sin(angle+10/100+angle_shift*angle_sign)*canvas_px_sample_dist;
+			cornerC = nearest(locationC,lvl);
+			angle_shift += Math.PI/8;
+			angle_sign *= -1;
+		} while(i++<3&&(cornerC[cornerC.length-1]<0||distance(cornerC,previous_corner)==0||distance(cornerC,cornerA)==0));
+
+		return cornerC;
+	}
+
+	function seekEquivalent(cornerA,cornerB=[])
+	{
+		var scanDepth = cornerA.length;
+		var minimum_hub_distance = base_length(levels+2);
+		var optimal_hub = false;
+		var levelAB = Math.floor(Math.log(distanceAB/block_width)/Math.log(s))+1;
+		var hubCount = Math.pow(19,scanDepth);
+		for(var i=0;i < hubCount; i++)
+		{
+			var num = i;
+			var hubPath = [];
+			for(var j=0;j < scanDepth; j++)
+			{
+				var lastPlace = num%19;
+				num = (num-lastPlace)/19;
+				hubPath = [lastPlace].concat(hubPath);
+			}
+			for(var j=0;j<scanDepth;j++)
+			{
+				if(distance(cornerA,hubPath)>base_length(levels-j)*s/(s-1))
+				{
+					var subGroups = Math.pow(19,j+1);
+					var groupSize = hubCount/subGroups;
+					i = Math.floor((Math.floor(i/groupSize)+1)*groupSize-1);
+					break;
+				}
+			}
+			if(distance(cornerA,hubPath)<base_length(0)&&JSON.stringify(cornerA)!=JSON.stringify(hubPath))
+			{
+				var hubA = cornerA.slice(0,levels-levelAB+1);
+				var hubC = hubPath.slice(0,levels-levelAB+1);
+				var distanceAB = distance(hubA,cornerB);
+				var distanceHB = distance(hubC,cornerB);
+				if(minimum_hub_distance>distanceHB)
+				{
+					minimum_hub_distance = distanceHB;
+					optimal_hub = hubPath;
+				}
+			}
+		}
+		return optimal_hub;
+	}
+
+	function distance(corner1, corner2)
+	{
+		var location1 = getLocation(corner1);
+		var location2 = getLocation(corner2);
+		var distance = Math.sqrt(Math.pow((location2[0]-location1[0]),2)+Math.pow((location2[1]-location1[1]),2))*meters_per_pixel;
+		return distance;
+	}
+
+	function getLevel(corner)
+	{
+		corner = [].concat(corner);
+		while(corner.length > 0)
+		{
+			if(corner.pop()!=0)
+			{
+				break;
+			}
+		}
+		return levels-corner.length;
+	}
+
+	function getPathTimes(path)
+	{
+		var times = [];
+		for(var i=0;i<path.length-1;i++)
+		{
+			times.push(segment_times[getRoadLevel(path[i],path[i+1])-1]);
+		}
+		return times;
+	}
+
+	function getPathTime(path)
+	{
+		return getPathTimes(path).reduce((a, b) => a + b, 0);
+	}
+
+	function getMatchingPoints(path1,path2)
+	{
+		var matching_points = [[0,0]];
+		for(var i=1;i<path1.length-1;i++)
+		{
+			for(var j=1;j<path2.length-1;j++)
+			{
+				if(distance(path1[i],path2[j])==0)
+				{
+					matching_points.push([i,j]);
+				}
+			}
+		}
+		matching_points.push([path1.length-1,path2.length-1]);
+		return matching_points;
+	}
+
+	// EVENT LISTENERS
+
+	var loaded = false;
+	var img;
+	var view_width = document.body.scrollWidth;
+	var view_height = document.documentElement.clientHeight - document.documentElement.offsetHeight;
+	var zoom_target = [];
+	var scrollbarWidth,scrollbarHeight;
+	var point;
+
+	function updateViewDimensions()
+	{
+		scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+		scrollbarHeight = window.innerHeight - document.documentElement.clientHeight;
+		var new_view_width = document.body.clientWidth;
+		var new_view_height = document.documentElement.clientHeight - document.documentElement.offsetHeight;
+		if(location_pointer.style.display=="block")
+		{
+			document.documentElement.style.scrollBehavior = "smooth"; 
+			window.scroll(window.scrollX+selected_point.getBoundingClientRect().left+(selected_point.getBoundingClientRect().width-view_width)/2,window.scrollY+selected_point.getBoundingClientRect().top+(selected_point.getBoundingClientRect().height-view_height/2)/2);
+			document.documentElement.style.scrollBehavior = "auto";			
+		}
+		else
+		{
+			window.scroll(window.scrollX-zoom_target[0]*(new_view_width-view_width),window.scrollY-zoom_target[1]*(new_view_height-view_height));
+		}
+
+		view_width = new_view_width;
+		view_height = new_view_height;
+		pixel_info.innerHTML = (1000/meters_per_pixel*devicePixelRatio).toFixed(0)+" pixels per kilometer<br>"+path_thickness+"x path thickness";
+	}
+
+	window.addEventListener('resize', function() {
+		updateViewDimensions()
+	})
+
+	window.addEventListener('load', function() {
+		updateViewDimensions();
+		img = new Image();
+		img.onload = setTimeout(function()
+			{
+				try
+				{
+					bitmap_ctx.drawImage(img,0,0);
+					if(!img.complete || !img.naturalWidth)
+					{
+						loading_message.classList.add("fadein");
+						dodecagon(get_ctx(levels),render_radius,render_radius,system_px_width/s,levels);
+						ctxs_makeImage();
+					}
+					else
+					{
+						center_all();
+						png_map.src = img.src;
+						canvases.style.opacity = 0;
+						canvases.style.pointerEvents = "none";
+					}
+					loading_message.style.display = "none";
+					loaded = true;
+				}
+				catch
+				{
+					loading_message.classList.add("fadein");
+					dodecagon(get_ctx(levels),render_radius,render_radius,system_px_width/s,levels);
+					ctxs_makeImage();
+					loading_message.style.display = "none";
+					loaded = true;
+				}
+			},1000);
+		img.src = 'Dodecagonal '+places[levels-1]+' ('+meters_per_pixel+','+path_thickness+').png';
+		setTimeout(function() {
+			window.scroll(render_radius*2-view_width/2,render_radius-view_height/10-(1-devicePixelRatio)*view_height/4);
+
+			print_header();
+			print_welcome();
+		},100)
+	})
+
+	function updatePointer()
+	{
+		if(!loaded) return;
+		pointerX = (event.pageX - window.scrollX) - (canvas.getBoundingClientRect().left + render_radius);
+		pointerY = (event.pageY - window.scrollY) - (canvas.getBoundingClientRect().top + render_radius);
+		zoom_target[0] = (event.pageX - window.scrollX)/view_width;
+		zoom_target[1] = (event.pageY - window.scrollY)/view_height;
+	}
+
+	function onmousemove_default(event)
+	{
+		updatePointer();
+		if(!loaded || out_of_bounds(event)) return;
+	}
+
+	document.onmousemove = function(event){ onmousemove_default(event) };
+
+	var mouse_down_X;
+	var mouse_down_Y;
+
+	var relX = 0;
+	var relY = 0;
+	var active_corner = [];
+
+	function out_of_bounds(event)
+	{
+		if(zoom_target[0]>0.95||zoom_target[1]>0.95) return true;
+
+		var clickCorner = nearest([mouse_down_X,mouse_down_Y]);
+		var clickLocation = getLocation(clickCorner);
+		var cc_x = clickLocation[0];
+		var cc_y = clickLocation[1];
+		if(Math.sqrt(Math.pow((mouse_down_X-cc_x),2)+Math.pow((mouse_down_Y-cc_y),2))>base_length(levels/2)/meters_per_pixel){
+			 return true;
+		}			
+	}
+
+	document.onmousedown = function(event) {
+		updatePointer();
+		relX = relY = 0;
+		mouse_down_X = pointerX;
+		mouse_down_Y = pointerY;
+		var init_scrollX = window.scrollX;
+		var init_scrollY = window.scrollY;
+		if(!loaded&&out_of_bounds(event))
+		{
+			return;
+		}
+		var clickCorner = nearest([mouse_down_X,mouse_down_Y]);
+		var clickLocation = getLocation(clickCorner);
+		var cornerA = getCornerA();
+		var cornerB = getCornerB();
+		var change_cornerA = false;
+		var change_cornerB = false;
+		var dragged = false;
+		if(select_history.length>1)
+		{
+			var distanceAC = distance(cornerA,clickCorner);
+			var distanceBC = distance(cornerB,clickCorner);
+			if(distanceBC < base_length(levels-1))
+			{
+				change_cornerB = true;
+				active_corner = cornerB;	
+				relX = pointerX - getLocation(cornerB)[0];
+				relY = pointerY - getLocation(cornerB)[1];
+			}
+			else if(distanceAC < base_length(levels-1))
+			{
+				change_cornerA = true;
+				active_corner = cornerA;
+				relX = pointerX - getLocation(cornerA)[0];
+				relY = pointerY - getLocation(cornerA)[1];
+			}
+		}
+		document.onmousemove = function(event) {
+			svgs.style.pointerEvents = "auto";
+			updatePointer();
+			if(select_history.length<2) return;
+			if(out_of_bounds(event)) return;
+			if(distance(clickCorner,nearest([pointerX,pointerY]))==0)
+			{
+				return;
+			}
+			if(Math.abs(pointerX - mouse_down_X)>10 || Math.abs(pointerY - mouse_down_Y)>10)
+			{
+				if(change_cornerA||change_cornerB)
+				{
+					window.scroll(init_scrollX+(pointerX-mouse_down_X)*Math.sqrt(devicePixelRatio)/1.75,init_scrollY+(pointerY-mouse_down_Y)*Math.sqrt(devicePixelRatio)/1.75);
+					render_route(event,change_cornerA,change_cornerB);	
+					document.onmouseup = function() {
+						svgs.style.pointerEvents = "none";
+						updatePointer();
+						document.onmousemove = null;
+						if(out_of_bounds(event)) return;
+					};
+				}
+			}
+		}
+		document.onmouseup = function(event) {
+			updatePointer();
+			document.onmousemove = null;
+			if(out_of_bounds(event)) return;
+			render_route(event,false,false);
+		}
+	}
+
+	// OUTPUT
+
+	function scroll_to_point(i)
+	{
+		location_pointer.style.display = "block";
+		selected_point = document.getElementById("point"+i);
+		selected_point.scrollIntoView(true);
+		document.documentElement.style.scrollBehavior = "smooth"; 
+		window.scroll(window.scrollX+selected_point.getBoundingClientRect().left+(selected_point.getBoundingClientRect().width-view_width)/2,window.scrollY+selected_point.getBoundingClientRect().top+(selected_point.getBoundingClientRect().height-view_height/2)/2);
+		document.documentElement.style.scrollBehavior = "auto";
+		location_pointer.style.left = (selected_point.getBoundingClientRect().left+selected_point.getBoundingClientRect().width/2+window.scrollX)+"px";
+		location_pointer.style.top = (selected_point.getBoundingClientRect().top+selected_point.getBoundingClientRect().height/2+window.scrollY)+"px";
+
+		window.location.href = window.location.href.split("#")[0] + "#info"+i;
+	}
+
+	function render_route(event,change_cornerA=false,change_cornerB=false)
+	{
+		location_pointer.style.display = "none";
+		if(nearest([pointerX,pointerY])[0]<0) return;
+		if(event.pageX-window.scrollX>=view_width||event.pageY-window.scrollY>=view_height) return;
+		if(logger.getBoundingClientRect().left < (event.pageX-window.scrollX) && logger.getBoundingClientRect().top < (event.pageY-window.scrollY) && logger.getBoundingClientRect().right > (event.pageX-window.scrollX) && logger.getBoundingClientRect().bottom > (event.pageY-window.scrollY)) return;
+		total_distance = 0;
+		var corner = nearest();
+		if(corner.length>0 && corner[corner.length-1] == -1) return;
+		if(change_cornerA)
+		{
+			var last_click = select_history.pop();
+			select_history.pop();
+			select_history.push([pointerX-relX,pointerY-relY]);
+			select_history.push(last_click);
+		}
+		else if(change_cornerB)
+		{
+			select_history.pop();
+			select_history.push([pointerX-relX,pointerY-relY]);
+		}
+		else
+		{
+			select_history.push([pointerX,pointerY]);
+		}
+		for(var i=0;i<svg_overlays.length;i++)
+		{
+			svg_overlays[i].innerHTML = "";
+		}
+		var cornerA = getCornerA();
+		var cornerB = getCornerB();
+		if(!cornerA||cornerA[0]==-1)
+		{
+			return;
+		}
+		logger.innerHTML="";
+		logger.scrollTop = 0;
+		if(!cornerB)
+		{
+			setMarker(cornerA,1,"green","black");
+			print_header();
+			print_to_log("<hr>");
+			print_to_log(`<span style="color: green">Departing</span> location `+JSON.stringify(cornerA));
+			return;
+		}
+		print_header();
+		if(distance(cornerA,cornerB)==0)
+		{
+			print_welcome();
+			summary.innerHTML = "Click on the map or drag the circle to change the route.";
+			setMarker(cornerA,1,"green","black");
+			setMarker(cornerB,1,"red","black");
+			return;
+		}
+		if(cornerA[cornerA.length-1] < 0 || cornerB[cornerA.length-1] < 0) return;
+		print_to_log("<hr>");
+		print_to_log(`<span style="color: green">Departing</span> location `+JSON.stringify(cornerA));
+		print_to_log(`<span style="color: red">Arrival</span> location `+JSON.stringify(cornerB));
+		path_finder(cornerA,cornerB);
+		var path1 = path.slice(0);
+		path_finder(cornerB,cornerA);
+		var path2 = path.slice(0);
+		path2.reverse();
+		var path1times = getPathTimes(path1);
+		var path2times = getPathTimes(path2);
+		var matching_points = getMatchingPoints(path1,path2);
+		var path3 = [];
+		for(var i=0;i<matching_points.length-1;i++)
+		{
+			path3.pop();
+			var path1a = matching_points[i][0];
+			var path1b = matching_points[i+1][0];
+			var path2a = matching_points[i][1];
+			var path2b = matching_points[i+1][1];
+			var path1time = path1times.slice(path1a,path1b).reduce((a, b) => a + b, 0);
+			var path2time = path2times.slice(path2a,path2b).reduce((a, b) => a + b, 0);
+			if(path1time < path2time)
+			{
+				var add_path = path1.slice(path1a,path1b+1);
+				path3 = path3.concat(add_path);
+			}
+			else if(path2time < path1time)
+			{
+				var add_path = path2.slice(path2a,path2b+1)
+				path3 = path3.concat(add_path);
+			}
+			else if(path2b-path2a > path1b-path1a)
+			{
+				var add_path = path1.slice(path1a,path1b+1);
+				path3 = path3.concat(add_path);
+			}
+			else
+			{
+				var add_path = path2.slice(path2a,path2b+1)
+				path3 = path3.concat(add_path);					
+			}
+		}
+		var path4 = path3.slice(0);
+
+		for(var i=path4.length-1;i>=3;i--)
+		{
+			for(var j=0;j<path4.length-i;j++)
+			{
+				var pre_subpath4 = path4.slice(0,j);
+				var subpath4 = path4.slice(j,j+i+1);
+				var post_subpath4 = path4.slice(j+i+1,path4.length);
+				path_finder(path4[j],path4[j+i]);
+				var alt_subpath4 = path.slice(0);
+				var subpath4time = getPathTime(subpath4);
+				var alt_subpath4time = getPathTime(alt_subpath4);
+				if(alt_subpath4time<subpath4time)
+				{
+					path4 = pre_subpath4.concat(alt_subpath4).concat(post_subpath4);
+				}
+				else if(Math.abs(alt_subpath4time/subpath4time) % 1 < 0.1 && alt_subpath4time.length>subpath4time.length)
+				{
+					path4 = pre_subpath4.concat(alt_subpath4).concat(post_subpath4);
+				}
+			}
+		}
+
+		if(select_history.length>1)
+		{
+			setMarker(cornerA,1,"green","black");
+			setMarker(cornerB,1,"red","black");
+		}
+		print_route(path4);	
+		current_time = new Date();
+		path=[];		
+	}
+
+	function print_route(route)
+	{
+		for(var i=0;i<route.length-1;i++)
+		{
+			var isFirst=false;
+			var isLast=false;
+			if(i==0) isFirst=true;
+			if(i==route.length-2) isLast=true;
+			var road_level = getRoadLevel(route[i],route[i+1]);
+			if(road_level > 0) setLine(route[i],route[i+1],road_level,isFirst,isLast,i);
+		}
+	}
+
+	function getRoadLevel(cornerA,cornerB)
+	{
+		return Math.round(Math.log(distance(cornerA,cornerB)/block_width)/Math.log(s)+1);
+	}
+
+	function setMarker(corner,lvl,color="black",stroke_color,i=0)
+	{
+		var circle = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
+		var coords = getLocation(corner);
+		circle.setAttribute("id","point"+i);
+		circle.setAttribute("r",(0.25*lvl)+"vmin");
+		circle.setAttribute("cx",render_radius+coords[0]);
+		circle.setAttribute("cy",render_radius+coords[1]);
+		circle.setAttribute("stroke",stroke_color?stroke_color:colors[lvl-1]);
+		circle.setAttribute("stroke-width",0.125*lvl+"vmin");
+		circle.setAttribute("fill",color);
+		circle.setAttribute("opacity",0.6);
+		var highlight_circle = circle.cloneNode(true);
+		highlight_circle.setAttribute("fill","white");
+		highlight_circle.setAttribute("stroke",colors[lvl-1]);
+		highlight_circle.setAttribute("stroke-width","0.5vmin");
+		highlight_circle.setAttribute("r",base_length(0.5+lvl)/meters_per_pixel);
+		highlight_circle.setAttribute("fill-opacity",0.03);
+		highlight_circle.setAttribute("class","drop_shadow");
+		svg_overlays[levels].appendChild(highlight_circle);			
+		svg_overlays[0].appendChild(circle);
+		if(color=="red"||color=="green")
+		{
+			highlight_circle.setAttribute("stroke-width","3vmin");
+			var highlight_circle2 = circle.cloneNode(true);
+		 	highlight_circle2.setAttribute("class",color+"_selector");
+		 	highlight_circle2.setAttribute("stroke",color);
+		 	highlight_circle2.setAttribute("r",base_length(levels/2+0.5)/meters_per_pixel);
+		 	highlight_circle2.setAttribute("fill-opacity",0.5);
+		 	svg_overlays[levels].appendChild(highlight_circle2);
+		}
+	}
+
+	function setLine(cornerA,cornerC,lvl,isFirst=false,isLast=false,i=0)
+	{
+		var line = document.createElementNS("http://www.w3.org/2000/svg", 'line');
+		svg_overlays[lvl].appendChild(line);
+
+		var coordsA = getLocation(cornerA);
+		var coordsC = getLocation(cornerC);
+		if(coordsC[0] == NaN || coordsC[1] == NaN) return;
+
+		var segment_dist = distance(cornerA,cornerC);
+		total_distance += segment_dist;
+		total_time += segment_times[lvl-1];
+		var direction = cardinal_direction(cornerA,cornerC);
+
+		line.setAttribute("x1",render_radius+coordsA[0]);
+		line.setAttribute("y1",render_radius+coordsA[1]);
+		line.setAttribute("x2",render_radius+coordsC[0]);
+		line.setAttribute("y2",render_radius+coordsC[1]);
+		line.setAttribute("stroke","black");
+		line.setAttribute("stroke-width",(0.5*lvl+0.5)+"vmax");
+		line.setAttribute("stroke-linecap","round");
+		var line_border = line.cloneNode(true);
+		line_border.setAttribute("stroke",colors[lvl-1]);
+		line_border.setAttribute("stroke-width",(0.25*lvl+0.5)+"vmax");
+		svg_overlays[lvl].appendChild(line_border);
+
+		setMarker(cornerA,getLevel(cornerA)-1,"yellow","black",i);
+		if(isLast) i++;
+		setMarker(cornerC,getLevel(cornerC)-1,"yellow","black",i);
+		print_output(segment_dist,direction,lvl,isFirst,isLast,i);
+
+	}
+
+	function print_output(segment_dist,direction,lvl,isFirst=false,isLast=false,i)
+	{
+		var seconds_to_get_on = seconds_to_get_off = station_wait_times[lvl-1]/2; // seconds
+		var seconds_to_accelerate = seconds_to_decelerate = top_kph[lvl-1]*1000/3600/acceleration; // seconds
+		var runway = runways[lvl-1]; // meters
+		var top_speed = top_kph[lvl-1]; // kilometers per hour
+		var cruise_distance = (segment_dist-runways[lvl-1]*2)/1000; // kilometers
+		var cruise_time = (segment_dist-runways[lvl-1]*2)/(top_kph[lvl-1]*1000/3600); // seconds
+		var departure_time = new Date((Math.ceil(current_time.getTime()/60/1000)*60*1000));
+		var estimated_time = new Date((Math.ceil(current_time.getTime()/60/1000)+total_time)*60*1000); // time
+
+		segment_dist = roundDigits(segment_dist,0);
+		seconds_to_get_on = roundDigits(seconds_to_get_on,1);
+		seconds_to_accelerate = roundDigits(seconds_to_accelerate,1);
+		runway = roundDigits(runway,1);
+		cruise_distance = roundDigits(cruise_distance,3);
+		cruise_time = roundDigits(cruise_time,1);
+		top_speed = roundDigits(top_speed,1);
+		seconds_to_decelerate = roundDigits(seconds_to_decelerate,1);
+		seconds_to_get_off = roundDigits(seconds_to_get_off,1);
+
+		var icon1_text=`<div class="via_icon"></div>`;
+		var icon2_text=`<div class="via_icon"></div>`;
+		if(isFirst) icon1_text=`<div class="start_icon"></div>`;
+		else if(isLast) icon2_text=`<div class="end_icon"></div>`;
+
+
+
+		print_to_log(`<a name="info`+i+`"><hr></a>`);
+		print_to_log(`<center>`+icon1_text+`<a href="javascript:scroll_to_point(`+i+`)">`+vehicles[lvl-1]+`</a>`+icon2_text+" ("+direction+")</center></a>",colors[lvl-1]);
+		print_to_log(segment_dist+" meters in "+Math.floor(segment_times[lvl-1])+"m "+('00'+((segment_times[lvl-1]*60)%60).toFixed(0)).slice(-2)+"s");
+		if(lvl>1)
+		{
+			 print_to_log(seconds_to_get_on+" seconds for passengers boarding on");
+		}
+		print_to_log(acceleration+" m/s^2 acceleration");
+		print_to_log(seconds_to_accelerate+" seconds to accelerate");
+		print_to_log(runway+" meters of acceleration runway");
+		print_to_log(top_speed+" kph top speed for "+cruise_distance+" kilometers");
+		print_to_log(cruise_time+" seconds in cruise");
+		print_to_log(runway+" meters of decceleration runway");
+		print_to_log(seconds_to_decelerate+" seconds to decelerate");
+		if(lvl>1)
+		{
+			 print_to_log(seconds_to_get_on+" seconds for passengers boarding off");
+		}
+		var travel_text = "Travel "+(total_distance/1000).toFixed(3)+" kilometers in "+Math.floor(total_time)+"m "+('00'+((total_time*60)%60).toFixed(0)).slice(-2)+"s";
+		var departure_text = "Departure time "+departure_time.toLocaleTimeString();
+		var arrival_text = "Arrival time "+estimated_time.toLocaleTimeString();
+		print_to_log(travel_text);
+		print_to_log(arrival_text);
+		if(isLast)
+		{
+			summary.innerHTML = travel_text+"<br>"+departure_text+"<br>"+arrival_text;
+		}
+	}
+
+	// CANVAS CONTEXT FUNCTIONS
+
+	function ctx_save()
+	{
+		for(var i=0; i<=levels; i++)
+		{
+			ctxs[i].save();
+		}	
+	}
+
+	function ctx_translate(x,y)
+	{
+		for(var i=0; i<=levels; i++)
+		{
+			ctxs[i].translate(x,y);
+		}	
+	}
+
+	function ctx_rotate(radians)
+	{
+		for(var i=0; i<=levels; i++)
+		{
+			ctxs[i].rotate(radians);
+		}	
+	}
+
+	function ctx_restore()
+	{
+		for(var i=0; i<=levels; i++)
+		{
+			ctxs[i].restore();
+		}	
+	}
+
+	function get_ctx(lvl)
+	{
+		return ctxs[lvl];
+	}
+
+	function ctxs_makeImage()
+	{
+		bitmap_ctx.clearRect(0,0,bitmap_ctx.width,bitmap_ctx.height)
+		for(var i=0;i<=levels;i++)
+		{
+			bitmap_ctx.drawImage(cnvs[i],0,0);
+		}
+	}
+
+
+	</script>
+</body>
+</html>
