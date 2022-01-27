@@ -11,6 +11,7 @@
 <style>
 * 
 	{
+      touch-action: pan-left, pan-right, pan-up, pan-down;
 		font-family: "Lucida Mono", "Monaco";
 		font-size: 1.8vmax;
 		line-height: 2.1vmax;
@@ -1230,7 +1231,6 @@
 	}
 
 	document.onmousedown = document.ontouchstart = function(event) {
-		alert("onmousedown");
 		updatePointer(event);
 		relX = relY = 0;
 		mouse_down_X = pointerX;
@@ -1268,7 +1268,6 @@
 			}
 		}
 		document.onmousemove = document.ontouchmove = function(event) {
-			alert("onmousedown -> onmousemove");
 			svgs.style.pointerEvents = "auto";
 			updatePointer(event);
 			if(select_history.length<2) return;
@@ -1284,7 +1283,6 @@
 					window.scroll(init_scrollX+(pointerX-mouse_down_X)*Math.sqrt(devicePixelRatio)/1.75,init_scrollY+(pointerY-mouse_down_Y)*Math.sqrt(devicePixelRatio)/1.75);
 					render_route(event,change_cornerA,change_cornerB);
 					document.onmouseup = document.ontouchend = function() {
-						alert("onmousedown -> onmousemove - > onmouseup");
 						svgs.style.pointerEvents = "none";
 						updatePointer(event);
 						document.onmousemove = null;
@@ -1294,7 +1292,6 @@
 			}
 		}
 		document.onmouseup = document.ontouchend = function(event) {
-			alert("onmouseup")
 			updatePointer(event);
 			document.onmousemove = null;
 			if(out_of_bounds(event)) return;
