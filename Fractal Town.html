@@ -12,8 +12,8 @@
 * 
 	{
 		font-family: "Lucida Mono", "Monaco";
-		font-size: 1.8vmax;
-		line-height: 2.1vmax;
+		font-size: 1.3vmax;
+		line-height: 1.5vmax;
 		-webkit-backface-visibility: hidden;
 	}
 	body
@@ -32,10 +32,13 @@
 		position: absolute;
 		left: 0;
 	}
+	#svgs
+	{
+		pointer-events: none;
+	}
 	svg
 	{
 		overflow: visible;
-		pointer-events: none;
 	}
 	#map_info
 	{
@@ -72,7 +75,6 @@
 		width: 53vw;
 		height: 40vh;
 		left: 5vw;
-		font-size: 0.8vh;
 		bottom: 2vh;
 		padding: 1vh;
 		overflow: auto;
@@ -134,6 +136,8 @@
 	#green_selector, #red_selector
 	{
 		pointer-events: fill;
+		margin: 100vmax;
+		padding: -100vmax;
 	}
 	#green_selector:hover, #red_selector:hover
 	{
@@ -262,6 +266,8 @@
 		<canvas id="canvas_img"></canvas>
 	</div>
 	<img id="png_map" class="fadein">
+	<div id="logger"></div>
+	<div id="summary"><h1>Welcome!</h1></div>
 	<div id="svgs">
 		<svg id="svg_overlay5" xmlns="http://www.w3.org/2000/svg"></svg>
 		<svg id="svg_overlay4" xmlns="http://www.w3.org/2000/svg"></svg>
@@ -270,8 +276,6 @@
 		<svg id="svg_overlay1" xmlns="http://www.w3.org/2000/svg"></svg>
 		<svg id="svg_overlay0" xmlns="http://www.w3.org/2000/svg"></svg>
 	</div>
-	<div id="logger"></div>
-	<div id="summary"><h1>Welcome!</h1></div>
 	<div id="zoom_info">To zoom, use the CTRL key+scroll wheel, or use touch.</div>
 	<div id="links">
 			Map<br>
@@ -1172,10 +1176,11 @@
 	})
 
 	var use_touch = false;
+	var pageX,pageY;
 
 	function updatePointer(event)
 	{
-		var x,y;
+		var clientX,clientY;
 		if(event.type == 'touchstart' ||
 			event.type == 'touchmove' ||
 			event.type == 'touchend' ||
@@ -1183,8 +1188,10 @@
 		{
 			use_touch = true;
 			var touch = event.touches[0] || event.changedTouches[0];
-			x = touch.clientX;
-			y = touch.clientY;
+			clientX = touch.clientX;
+			clientY = touch.clientY;
+			pageX = touch.pageX;
+			pageY = touch.pageY;
 		}
 		else if (event.type == 'mousedown' ||
 			event.type == 'mouseup' ||
@@ -1194,14 +1201,16 @@
 			event.type == 'mouseenter' ||
 			event.type == 'mouseleave')
 		{
-			x = event.clientX;
-			y = event.clientY;
+			clientX = event.clientX;
+			clientY = event.clientY;
+			pageX = event.pageX;
+			pageY = event.pageY;
 		}
 		if(!loaded) return;
-		pointerX = x - (canvas.getBoundingClientRect().left + render_radius);
-		pointerY = y - (canvas.getBoundingClientRect().top + render_radius);
-		zoom_target[0] = (x - window.scrollX)/view_width;
-		zoom_target[1] = (y - window.scrollY)/view_height;
+		pointerX = clientX - (canvas.getBoundingClientRect().left + render_radius);
+		pointerY = clientY - (canvas.getBoundingClientRect().top + render_radius);
+		zoom_target[0] = (pageX - window.scrollX)/view_width;
+		zoom_target[1] = (pageY - window.scrollY)/view_height;
 	}
 
 	function onmousemove_default(event)
@@ -1230,6 +1239,12 @@
 		if(Math.sqrt(Math.pow((mouse_down_X-cc_x),2)+Math.pow((mouse_down_Y-cc_y),2))>base_length(levels/2)/meters_per_pixel){
 			 return true;
 		}			
+	}
+
+	function logger_selected(event)
+	{
+		if(logger.getBoundingClientRect().left < (pageX-window.scrollX) && logger.getBoundingClientRect().top < (pageY-window.scrollY) && logger.getBoundingClientRect().right > (pageX-window.scrollX) && logger.getBoundingClientRect().bottom > (pageY-window.scrollY)) return true;
+		else false;		
 	}
 
 	var change_cornerA = false;
@@ -1278,7 +1293,6 @@
 		isSelectedCorner(clickCorner);
 		document.onmousemove = function(event) {
 			if(use_touch) return;
-			svgs.style.pointerEvents = "auto";
 			updatePointer(event);
 			if(select_history.length<2) return;
 			if(out_of_bounds(event)) return;
@@ -1294,7 +1308,6 @@
 					render_route(event,change_cornerA,change_cornerB);
 					document.onmouseup = function() {
 						if(use_touch) return;
-						svgs.style.pointerEvents = "none";
 						updatePointer(event);
 						document.onmousemove = null;
 						document.onmouseup = null;
@@ -1305,8 +1318,8 @@
 			}
 		}
 		document.onmouseup = function(event) {
+			if(logger_selected(event)) return;
 			if(use_touch) return;
-			svgs.style.pointerEvents = "none";
 			updatePointer(event);
 			document.onmousemove = null;
 			if(out_of_bounds(event)) return;
@@ -1366,8 +1379,15 @@
 			}
 		}
 		document.ontouchend = function(event) {
+			if(logger_selected(event)){
+				green_selector.style.transform = "translate(0px,0px)";
+				green_selector_ring.style.transform = "translate(0px,0px)";
+				red_selector.style.transform = "translate(0px,0px)";
+				red_selector_ring.style.transform = "translate(0px,0px)";
+				window.scrollBy((mouse_down_X-pointerX)*Math.sqrt(devicePixelRatio)/3,(mouse_down_Y-pointerY)*Math.sqrt(devicePixelRatio)/3);
+				return;
+			}
 			if(!use_touch) return;
-			svgs.style.pointerEvents = "none";
 			updatePointer(event);
 			document.ontouchmove = null;
 			if(out_of_bounds(event)) return;
@@ -1398,7 +1418,6 @@
 		location_pointer.style.display = "none";
 		if(nearest([pointerX,pointerY])[0]<0) return;
 		if(event.pageX-window.scrollX>=view_width||event.pageY-window.scrollY>=view_height) return;
-		if(logger.getBoundingClientRect().left < (event.pageX-window.scrollX) && logger.getBoundingClientRect().top < (event.pageY-window.scrollY) && logger.getBoundingClientRect().right > (event.pageX-window.scrollX) && logger.getBoundingClientRect().bottom > (event.pageY-window.scrollY)) return;
 		total_distance = 0;
 		var corner = nearest();
 		if(corner.length>0 && corner[corner.length-1] == -1) return;
@@ -1572,7 +1591,7 @@
 		 	highlight_circle2.setAttribute("stroke",color);
 		 	highlight_circle2.setAttribute("r",base_length(levels/2+0.5)/meters_per_pixel);
 		 	highlight_circle2.setAttribute("fill-opacity",0.5);
-		 	svg_overlays[levels].appendChild(highlight_circle2);
+		 	svg_overlays[0].appendChild(highlight_circle2);
 		}
 	}
 
