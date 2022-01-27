@@ -1170,31 +1170,38 @@
 		},100)
 	})
 
+	var use_touch = false;
+
 	function updatePointer(event)
 	{
+		if(!loaded) return;
 		var x,y;
 		if(event.type == 'touchstart' ||
 			event.type == 'touchmove' ||
 			event.type == 'touchend' ||
 			event.type == 'touchcancel')
 		{
-			console.log(event.changedTouches[0]);
+			use_touch == true
 			var touch = event.touches[0] || event.changedTouches[0];
 			x = touch.pageX;
 			y = touch.pageY;
 		}
-		else if (event.type == 'mousedown' ||
+		else if (use_touch == false &&
+		(	event.type == 'mousedown' ||
 			event.type == 'mouseup' ||
 			event.type == 'mousemove' ||
 			event.type == 'mouseover'||
 			event.type == 'mouseout' ||
 			event.type == 'mouseenter' ||
-			event.type == 'mouseleave')
+			event.type == 'mouseleave'))
 		{
 			x = event.clientX;
 			y = event.clientY;
 		}
-		if(!loaded) return;
+		else
+		{
+			return;
+		}
 		pointerX = x - (canvas.getBoundingClientRect().left + render_radius);
 		pointerY = y - (canvas.getBoundingClientRect().top + render_radius);
 		zoom_target[0] = (x - window.scrollX)/view_width;
