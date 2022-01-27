@@ -1359,6 +1359,10 @@
 						red_selector_ring.style.transform = translate;
 					}
 				}
+				else
+				{
+					document.ontouchmove = null;
+				}
 			}
 		}
 		document.ontouchend = function(event) {
