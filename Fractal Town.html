@@ -1342,9 +1342,9 @@
 			}
 			if(Math.abs(pointerX - mouse_down_X)>10 || Math.abs(pointerY - mouse_down_Y)>10)
 			{
+				dragged = true;
 				if(change_cornerA||change_cornerB)
 				{
-					dragged = true;
 					window.scroll(init_scrollX+(pointerX-mouse_down_X)*Math.sqrt(devicePixelRatio)/3,init_scrollY+(pointerY-mouse_down_Y)*Math.sqrt(devicePixelRatio)/3);
 					if(change_cornerA)
 					{
