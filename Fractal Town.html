@@ -1283,10 +1283,9 @@
 					window.scroll(init_scrollX+(pointerX-mouse_down_X)*Math.sqrt(devicePixelRatio)/1.75,init_scrollY+(pointerY-mouse_down_Y)*Math.sqrt(devicePixelRatio)/1.75);
 					render_route(event,change_cornerA,change_cornerB);
 					document.onmouseup = document.ontouchend = function() {
-						if(distance(cornerA,cornerB)==0) return;
 						svgs.style.pointerEvents = "none";
 						updatePointer(event);
-						document.onmousemove = null;
+						document.onmousemove = document.ontouchend = null;
 						if(out_of_bounds(event)) return;
 					};
 				}
@@ -1294,7 +1293,7 @@
 		}
 		document.onmouseup = document.ontouchend = function(event) {
 			updatePointer(event);
-			document.onmousemove = null;
+			document.onmousemove = document.ontouchend = null;
 			if(out_of_bounds(event)) return;
 			render_route(event,false,false);
 		}
