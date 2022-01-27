@@ -11,7 +11,6 @@
 <style>
 * 
 	{
-      touch-action: pan-left, pan-right, pan-up, pan-down;
 		font-family: "Lucida Mono", "Monaco";
 		font-size: 1.8vmax;
 		line-height: 2.1vmax;
@@ -58,7 +57,7 @@
 		background-color: rgba(255,255,0,0.8);
 		position: fixed;
 		right: 0;
-		top: 30vh;
+		top: 25vh;
 		padding: 1vmax;
 		border-radius: 1.5vmax 0px 0px 1.5vmax;
 	}
@@ -131,6 +130,15 @@
 		align-items: center;
 		pointer-events: none;
 	}
+	#green_selector, #red_selector
+	{
+		pointer-events: fill;
+	}
+	#green_selector:hover, #red_selector:hover
+	{
+		stroke-color: "yellow";
+		z-index: 10;
+	}
 	div
 	{
 		padding: 0.2vw;
@@ -170,15 +178,6 @@
 		border-collapse: collapse;
 		border-spacing: 0;
    }
-	.green_selector, .red_selector
-	{
-		pointer-events: fill;
-	}
-	.green_selector:hover, .red_selector:hover
-	{
-		stroke-color: "yellow";
-		z-index: 10;
-	}
 	.start_icon,.via_icon,.end_icon
 	{
 		display: inline-block;
@@ -487,11 +486,11 @@
 		var view_height = document.documentElement.clientHeight - document.documentElement.offsetHeight;
 		if(render_radius <= view_width/2&&render_radius <= view_height/2)
 		{
-			object.style.transform = 'translate('+(view_width/2-render_radius)+'px,'+(view_height/10)+'px)';
+			object.style.transform = 'translate('+(view_width/2-render_radius)+'px,'+(view_height/5)+'px)';
 		}
 		else
 		{
-			object.style.transform = 'translate(0px,'+(view_height/10)+'px)';
+			object.style.transform = 'translate(0px,'+(view_height/5)+'px)';
 		}
 	}
 
@@ -1232,24 +1231,16 @@
 		}			
 	}
 
-	document.onmousedown = document.ontouchstart = function(event) {
-		updatePointer(event);
-		relX = relY = 0;
-		mouse_down_X = pointerX;
-		mouse_down_Y = pointerY;
-		var init_scrollX = window.scrollX;
-		var init_scrollY = window.scrollY;
-		if(!loaded&&out_of_bounds(event))
-		{
-			return;
-		}
-		var clickCorner = nearest([mouse_down_X,mouse_down_Y]);
+	var change_cornerA = false;
+	var change_cornerB = false;
+
+	function isSelectedCorner(clickCorner)
+	{
 		var clickLocation = getLocation(clickCorner);
 		var cornerA = getCornerA();
 		var cornerB = getCornerB();
-		var change_cornerA = false;
-		var change_cornerB = false;
-		var dragged = false;
+		change_cornerA = false;
+		change_cornerB = false;
 		if(select_history.length>1)
 		{
 			var distanceAC = distance(cornerA,clickCorner);
@@ -1269,7 +1260,23 @@
 				relY = pointerY - getLocation(cornerA)[1];
 			}
 		}
-		document.onmousemove = document.ontouchmove = function(event) {
+	}
+
+	document.onmousedown = function(event) {
+		updatePointer(event);
+		relX = relY = 0;
+		mouse_down_X = pointerX;
+		mouse_down_Y = pointerY;
+		var init_scrollX = window.scrollX;
+		var init_scrollY = window.scrollY;
+		if(!loaded&&out_of_bounds(event))
+		{
+			return;
+		}
+		var clickCorner = nearest([mouse_down_X,mouse_down_Y]);
+		isSelectedCorner(clickCorner);
+		document.onmousemove = function(event) {
+			if(use_touch) return;
 			svgs.style.pointerEvents = "auto";
 			updatePointer(event);
 			if(select_history.length<2) return;
@@ -1289,15 +1296,9 @@
 						svgs.style.pointerEvents = "none";
 						updatePointer(event);
 						document.onmousemove = null;
+						document.onmouseup = null;
 						if(out_of_bounds(event)) return;
 						render_route(event,change_cornerA,change_cornerB);
-					};
-					document.ontouchend = function() {
-						if(!use_touch) return;
-						svgs.style.pointerEvents = "none";
-						updatePointer(event);
-						document.ontouchmove = null;
-						if(out_of_bounds(event)) return;
 					};
 				}
 			}
@@ -1308,7 +1309,55 @@
 			updatePointer(event);
 			document.onmousemove = null;
 			if(out_of_bounds(event)) return;
-			render_route(event,false,false);
+			render_route(event,change_cornerA,change_cornerB);
+		}
+	}
+
+	var dragged = false;
+
+	document.ontouchstart = function(event) {
+		document.onmousedown = null;
+		updatePointer(event);
+		relX = relY = 0;
+		mouse_down_X = pointerX;
+		mouse_down_Y = pointerY;
+		var init_scrollX = window.scrollX;
+		var init_scrollY = window.scrollY;
+		if(!loaded&&out_of_bounds(event))
+		{
+			return;
+		}
+		var clickCorner = nearest([mouse_down_X,mouse_down_Y]);
+		var change_corners = isSelectedCorner(clickCorner);
+		document.ontouchmove = function(event) {
+			if(!use_touch) return;
+			updatePointer(event);
+			if(select_history.length<2) return;
+			if(out_of_bounds(event)) return;
+			if(distance(clickCorner,nearest([pointerX,pointerY]))==0)
+			{
+				return;
+			}
+			if(Math.abs(pointerX - mouse_down_X)>10 || Math.abs(pointerY - mouse_down_Y)>10)
+			{
+				if(change_cornerA||change_cornerB)
+				{
+					dragged = true;
+					window.scroll(init_scrollX+(pointerX-mouse_down_X)*Math.sqrt(devicePixelRatio)/3,init_scrollY+(pointerY-mouse_down_Y)*Math.sqrt(devicePixelRatio)/3);
+					if(change_cornerA)
+					{
+						var translate = "translate("+(pointerX - getLocation(getCornerA())[0])+"px,"+(pointerY - getLocation(getCornerA())[1])+"px)";
+						green_selector.style.transform = translate;
+						green_selector_ring.style.transform = translate;
+					}					
+					if(change_cornerB)
+					{
+						var translate = "translate("+(pointerX - getLocation(getCornerB())[0])+"px,"+(pointerY - getLocation(getCornerB())[1])+"px)";
+						red_selector.style.transform = translate;
+						red_selector_ring.style.transform = translate;
+					}
+				}
+			}
 		}
 		document.ontouchend = function(event) {
 			if(!use_touch) return;
@@ -1316,9 +1365,11 @@
 			updatePointer(event);
 			document.ontouchmove = null;
 			if(out_of_bounds(event)) return;
-			render_route(event,false,false);
+			if(dragged && !(change_cornerA||change_cornerB)) return;
+			render_route(event,change_cornerA,change_cornerB);
 		}
 	}
+
 
 	// OUTPUT
 
@@ -1508,9 +1559,10 @@
 		svg_overlays[0].appendChild(circle);
 		if(color=="red"||color=="green")
 		{
+			highlight_circle.setAttribute("id",color+"_selector_ring");
 			highlight_circle.setAttribute("stroke-width","3vmin");
 			var highlight_circle2 = circle.cloneNode(true);
-		 	highlight_circle2.setAttribute("class",color+"_selector");
+			highlight_circle2.setAttribute("id",color+"_selector");
 		 	highlight_circle2.setAttribute("stroke",color);
 		 	highlight_circle2.setAttribute("r",base_length(levels/2+0.5)/meters_per_pixel);
 		 	highlight_circle2.setAttribute("fill-opacity",0.5);
