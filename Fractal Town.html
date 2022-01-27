@@ -1171,6 +1171,8 @@
 		},100)
 	})
 
+	var use_touch = false;
+
 	function updatePointer(event)
 	{
 		var x,y;
@@ -1179,7 +1181,7 @@
 			event.type == 'touchend' ||
 			event.type == 'touchcancel')
 		{
-			console.log(event.changedTouches[0]);
+			use_touch = true;
 			var touch = event.touches[0] || event.changedTouches[0];
 			x = touch.clientX;
 			y = touch.clientY;
@@ -1282,18 +1284,37 @@
 				{
 					window.scroll(init_scrollX+(pointerX-mouse_down_X)*Math.sqrt(devicePixelRatio)/1.75,init_scrollY+(pointerY-mouse_down_Y)*Math.sqrt(devicePixelRatio)/1.75);
 					render_route(event,change_cornerA,change_cornerB);
-					document.onmouseup = document.ontouchend = function() {
+					document.onmouseup = function() {
+						if(use_touch) return;
 						svgs.style.pointerEvents = "none";
 						updatePointer(event);
-						document.onmousemove = document.ontouchend = null;
+						document.onmousemove = null;
+						if(out_of_bounds(event)) return;
+						render_route(event,change_cornerA,change_cornerB);
+					};
+					document.ontouchend = function() {
+						if(!use_touch) return;
+						svgs.style.pointerEvents = "none";
+						updatePointer(event);
+						document.ontouchmove = null;
 						if(out_of_bounds(event)) return;
 					};
 				}
 			}
 		}
-		document.onmouseup = document.ontouchend = function(event) {
+		document.onmouseup = function(event) {
+			if(use_touch) return;
+			svgs.style.pointerEvents = "none";
 			updatePointer(event);
-			document.onmousemove = document.ontouchend = null;
+			document.onmousemove = null;
+			if(out_of_bounds(event)) return;
+			render_route(event,false,false);
+		}
+		document.ontouchend = function(event) {
+			if(!use_touch) return;
+			svgs.style.pointerEvents = "none";
+			updatePointer(event);
+			document.ontouchmove = null;
 			if(out_of_bounds(event)) return;
 			render_route(event,false,false);
 		}
