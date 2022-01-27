@@ -1330,8 +1330,6 @@
 		var clickCorner = nearest([mouse_down_X,mouse_down_Y]);
 		var change_corners = isSelectedCorner(clickCorner);
 		document.ontouchmove = function(event) {
-			document.body.style.position = "sticky";
-			document.body.style.overflow = "hidden";
 			if(!use_touch) return;
 			updatePointer(event);
 			if(select_history.length<2) return;
@@ -1344,6 +1342,8 @@
 			{
 				if(change_cornerA||change_cornerB)
 				{
+					document.body.style.position = "sticky";
+					document.body.style.overflow = "hidden";
 					dragged = true;
 					window.scroll(init_scrollX+(pointerX-mouse_down_X)*Math.sqrt(devicePixelRatio)/3,init_scrollY+(pointerY-mouse_down_Y)*Math.sqrt(devicePixelRatio)/3);
 					if(change_cornerA)
@@ -1369,6 +1369,8 @@
 			if(out_of_bounds(event)) return;
 			if(dragged && !(change_cornerA||change_cornerB)) return;
 			render_route(event,change_cornerA,change_cornerB);
+			document.body.style.position = "static";
+			document.body.style.overflow = "auto";
 		}
 	}
 
