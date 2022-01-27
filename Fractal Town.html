@@ -1344,10 +1344,10 @@
 			{
 				if(change_cornerA||change_cornerB)
 				{
+					window.scroll(init_scrollX+(pointerX-mouse_down_X)*Math.sqrt(devicePixelRatio)/3,init_scrollY+(pointerY-mouse_down_Y)*Math.sqrt(devicePixelRatio)/3);
 					document.body.style.position = "sticky";
 					document.body.style.overflow = "hidden";
 					dragged = true;
-					window.scroll(init_scrollX+(pointerX-mouse_down_X)*Math.sqrt(devicePixelRatio)/3,init_scrollY+(pointerY-mouse_down_Y)*Math.sqrt(devicePixelRatio)/3);
 					if(change_cornerA)
 					{
 						var translate = "translate("+(pointerX - getLocation(getCornerA())[0])+"px,"+(pointerY - getLocation(getCornerA())[1])+"px)";
