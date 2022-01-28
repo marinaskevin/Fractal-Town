@@ -18,6 +18,7 @@
 	}
 	body
 	{
+		overscroll-behavior: contain;
 		background-color: SteelBlue;
 		background-image: url("SkyWay Linear City in Abu Dhabi.jpg");
 		background-size: 100%;
@@ -1330,8 +1331,6 @@
 		var clickCorner = nearest([mouse_down_X,mouse_down_Y]);
 		var change_corners = isSelectedCorner(clickCorner);
 		document.ontouchmove = function(event) {
-			document.body.style.position = "sticky";
-			document.body.style.overflow = "hidden";
 			if(!use_touch) return;
 			updatePointer(event);
 			if(select_history.length<2) return;
@@ -1345,7 +1344,7 @@
 				if(change_cornerA||change_cornerB)
 				{
 					dragged = true;
-					window.scroll(init_scrollX+(pointerX-mouse_down_X)*Math.sqrt(devicePixelRatio)/3,init_scrollY+(pointerY-mouse_down_Y)*Math.sqrt(devicePixelRatio)/3);
+					window.scroll(init_scrollX,init_scrollY);
 					if(change_cornerA)
 					{
 						var translate = "translate("+(pointerX - getLocation(getCornerA())[0])+"px,"+(pointerY - getLocation(getCornerA())[1])+"px)";
