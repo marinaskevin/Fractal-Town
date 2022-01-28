@@ -1316,8 +1316,6 @@
 	var dragged = false;
 
 	document.ontouchstart = function(event) {
-		document.body.style.position = "static";
-		document.body.style.overflow = "auto";
 		document.onmousedown = null;
 		updatePointer(event);
 		relX = relY = 0;
@@ -1371,6 +1369,8 @@
 			if(out_of_bounds(event)) return;
 			if(dragged && !(change_cornerA||change_cornerB)) return;
 			render_route(event,change_cornerA,change_cornerB);
+			document.body.style.position = "static";
+			document.body.style.overflow = "auto";
 		}
 	}
 
