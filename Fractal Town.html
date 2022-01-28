@@ -9,7 +9,7 @@
 	<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.0.0-rc.5/dist/html2canvas.min.js"></script>
 </head>
 <style>
-* 
+	* 
 	{
 		font-family: "Lucida Mono", "Monaco";
 		font-size: 1.3vmax;
@@ -26,6 +26,22 @@
 		background-attachment: fixed;
 		background-position: 50% 0%; 
 		margin: 0;
+	}
+	#loading_message
+	{
+		background-color: black;
+		opacity: 1;
+		position: fixed;
+		top: 40vh;
+		left: 20vw;
+		width: 40vw;
+		justify-content: center;
+		align-content: center;
+		text-align: center;
+		color: white;
+		padding: 5vh 10vw;
+		border-radius: 1.5vmax;
+		pointer-events: none;
 	}
 	canvas, svg, #canvases, #svgs, #map, #png_map
 	{
@@ -72,7 +88,7 @@
 		background-color: rgba(255,255,255,1);
 		color: black;
 		position: fixed;
-		width: 53vw;
+		width: 50vw;
 		height: 40vh;
 		left: 5vw;
 		bottom: 2vh;
@@ -80,33 +96,16 @@
 		overflow: auto;
 		border-radius: 1.5vmax 1.5vmax 0px 0px;
 	}
-	#loading_message
-	{
-		background-color: black;
-		opacity: 1;
-		position: fixed;
-		width: 60vw;
-		top: 40vh;
-		left: 20vw;
-		justify-content: center;
-		align-content: center;
-		text-align: center;
-		font-size: calc(5vh);
-		color: white;
-		padding: 3vh;
-		border-radius: 1.5vmax;
-		pointer-events: none;
-	}
 	#summary
 	{
     	-webkit-mask-image: -webkit-gradient(linear, left top, left bottom, color-stop(0.00,rgba(0,0,0,0)), color-stop(0.05,rgba(0,0,0,1)),color-stop(0.95,rgba(0,0,0,1)),color-stop(1.00,rgba(0,0,0,0)));
 		background-color: rgba(255,255,255,0.8);
 		position: fixed;
 		height: 33vh;
-		width: 35vw;
-		left: 61vw;
+		width: 35.5vw;
+		right: 5vw;
 		bottom: 2vh;
-		padding: 2.5vh 0vh 0vh 0vh;
+		padding: 3vh 0vh 0vh 0vh;
 		text-align: center;
 		color: black;
 		border-radius: 1.5vmax;
@@ -120,6 +119,16 @@
 		width: 100vw;
 		text-align: center;
 		color: white;
+	}
+	#logger_control
+	{
+		display: none;
+		background-color: rgba(255,255,0,0.8);
+		position: fixed;
+		left: 35vw;
+		top: 90vh;
+		padding: 1vmax;
+		border-radius: 1.5vmax;
 	}
 	#location_pointer
 	{
@@ -266,9 +275,8 @@
 		<canvas id="canvas_img"></canvas>
 	</div>
 	<img id="png_map" class="fadein">
-	<div id="logger"></div>
-	<div id="summary"><h1>Welcome!</h1></div>
 	<div id="svgs">
+		<svg id="svg_overlay6" xmlns="http://www.w3.org/2000/svg"></svg>
 		<svg id="svg_overlay5" xmlns="http://www.w3.org/2000/svg"></svg>
 		<svg id="svg_overlay4" xmlns="http://www.w3.org/2000/svg"></svg>
 		<svg id="svg_overlay3" xmlns="http://www.w3.org/2000/svg"></svg>
@@ -276,6 +284,9 @@
 		<svg id="svg_overlay1" xmlns="http://www.w3.org/2000/svg"></svg>
 		<svg id="svg_overlay0" xmlns="http://www.w3.org/2000/svg"></svg>
 	</div>
+	<div id="summary"><h1>Welcome!</h1></div>
+	<div id="logger"></div>
+	<div id="logger_control"><a href="#logger_top">Scroll to top</a></div>
 	<div id="zoom_info">To zoom, use the CTRL key+scroll wheel, or use touch.</div>
 	<div id="links">
 			Map<br>
@@ -405,19 +416,19 @@
 
 	const descriptions = 
 	[
-		`	Rendering a hub`
+		`Rendering a hub`
 		,
-		`	Rendering 19 hubs`
+		`Rendering 19 hubs`
 		,
-		`	Rendering 325 hubs`
+		`Rendering 325 hubs`
 		,
-		`	Rendering 5491 hubs`
+		`Rendering 5491 hubs`
 		,	
-		`	Rendering 92797 hubs`
+		`Rendering 92797 hubs`
 
 	];
 
-	loading_message.innerHTML += '<span>'+descriptions[levels-1]+'<span>';
+	loading_message.innerHTML += descriptions[levels-1];
 
 	const total_width = 2 * block_width * Math.sqrt(s) * geometric_sum(s,levels);
 	var distance_label = "";
@@ -445,14 +456,28 @@
 		print_to_log("You can also drag the endpoints.");
 	}
 
+	var svgs_clone=false;
+
+	function renew_svgs_clone()
+	{
+		if(svgs_clone)
+		{
+			document.body.removeChild(svgs_clone);
+		}
+		svgs_clone = svgs.cloneNode(true);
+		svgs_clone.setAttribute("id","svgs_clone");
+		svgs_clone.setAttribute("style","opacity: 0.4");
+		document.body.appendChild(svgs_clone);
+	}
+
 	function print_header()
 	{
-		if(levels>=1) print_to_log(`▢&△ with `+base_length(1).toFixed(0)+`-meter `+vehicles[0]+`s`,`Khaki`);
-		if(levels>=2) print_to_log(`▢&△ with `+base_length(2).toFixed(0)+`-meter `+vehicles[1]+` paths`,`LightSalmon`);
-		if(levels>=3) print_to_log(`▢&△ with `+base_length(3).toFixed(0)+`-meter `+vehicles[2]+` paths`,`LightGray`);
-		if(levels>=4) print_to_log(`▢&△ with `+(base_length(4)/1000).toFixed(1)+`-km `+vehicles[3]+` paths`,`SkyBlue`);
-		if(levels>=5) print_to_log(`▢&△ with `+(base_length(5)/1000).toFixed(1)+`-km `+vehicles[4]+` paths`,`Gold`);
-		if(levels>=5) print_to_log(`<small>6▢ + 12△ `+vehicles[4]+` system width for metropolis = `+(base_length(6)/1000).toFixed(1)+` kilometers across</small>`,`Gold`);
+		print_to_log(`<a name="logger_top"/>`);
+		if(levels>=1) print_to_log(base_length(1).toFixed(0)+`-meter `+vehicles[0]+`s`,`Khaki`);
+		if(levels>=2) print_to_log(base_length(2).toFixed(0)+`-meter `+vehicles[1]+` segments`,`LightSalmon`);
+		if(levels>=3) print_to_log(base_length(3).toFixed(0)+`-meter `+vehicles[2]+` segments`,`LightGray`);
+		if(levels>=4) print_to_log((base_length(4)/1000).toFixed(1)+`-km `+vehicles[3]+` segments`,`SkyBlue`);
+		if(levels>=5) print_to_log((base_length(5)/1000).toFixed(1)+`-km `+vehicles[4]+` segments`,`Gold`);
 	}
 	// □2 = 6□ + 12△ + 1✧ = 7□ + 16△ + 0✧
 	// ((6+1) + (12+4)*sin(60 degrees)/2)/(2+sqrt(3))^2
@@ -542,7 +567,7 @@
 
 		var svg_overlays = [];
 
-		for(var i=0; i<=levels;i++)
+		for(var i=0; i<=levels+1;i++)
 		{
 			var svg_overlay = document.getElementById('svg_overlay'+i);
 			svg_overlay.setAttribute("width",canvas.width)
@@ -1129,8 +1154,9 @@
 	}
 
 	window.addEventListener('resize', function() {
-		center_all()
-		updateViewDimensions()
+		center_all();
+		updateViewDimensions();
+		renew_svgs_clone();
 	})
 
 	window.addEventListener('load', function() {
@@ -1180,6 +1206,14 @@
 
 	function updatePointer(event)
 	{
+		if(logger.scrollTop>0)
+		{
+			logger_control.style.display = "block";
+		}
+		else
+		{
+			logger_control.style.display = "none";
+		}
 		var clientX,clientY;
 		if(event.type == 'touchstart' ||
 			event.type == 'touchmove' ||
@@ -1279,6 +1313,7 @@
 	}
 
 	document.onmousedown = function(event) {
+		dragged=false;
 		updatePointer(event);
 		relX = relY = 0;
 		mouse_down_X = pointerX;
@@ -1292,6 +1327,7 @@
 		var clickCorner = nearest([mouse_down_X,mouse_down_Y]);
 		isSelectedCorner(clickCorner);
 		document.onmousemove = function(event) {
+			dragged=true;
 			if(use_touch) return;
 			updatePointer(event);
 			if(select_history.length<2) return;
@@ -1309,7 +1345,7 @@
 					document.onmouseup = function() {
 						if(use_touch) return;
 						updatePointer(event);
-						document.onmousemove = null;
+						document.onmousemove = onmousemove_default(event);
 						document.onmouseup = null;
 						if(out_of_bounds(event)) return;
 						render_route(event,change_cornerA,change_cornerB);
@@ -1321,7 +1357,7 @@
 			if(logger_selected(event)) return;
 			if(use_touch) return;
 			updatePointer(event);
-			document.onmousemove = null;
+			document.onmousemove = onmousemove_default(event);
 			if(out_of_bounds(event)) return;
 			render_route(event,change_cornerA,change_cornerB);
 		}
@@ -1361,25 +1397,27 @@
 					window.scroll(init_scrollX+(pointerX-mouse_down_X)*Math.sqrt(devicePixelRatio)/3,init_scrollY+(pointerY-mouse_down_Y)*Math.sqrt(devicePixelRatio)/3);
 					if(change_cornerA)
 					{
-						var translate = "translate("+(pointerX - getLocation(getCornerA())[0])+"px,"+(pointerY - getLocation(getCornerA())[1])+"px)";
+						var translate = "translate("+(pointerX-relX - getLocation(getCornerA())[0])+"px,"+(pointerY-relY - getLocation(getCornerA())[1])+"px)";
+						point_departure.style.transform = translate;
 						green_selector.style.transform = translate;
 						green_selector_ring.style.transform = translate;
 					}					
 					if(change_cornerB)
 					{
-						var translate = "translate("+(pointerX - getLocation(getCornerB())[0])+"px,"+(pointerY - getLocation(getCornerB())[1])+"px)";
+						var translate = "translate("+(pointerX-relX - getLocation(getCornerB())[0])+"px,"+(pointerY-relY - getLocation(getCornerB())[1])+"px)";
+						point_arrival.style.transform = translate;
 						red_selector.style.transform = translate;
 						red_selector_ring.style.transform = translate;
 					}
 				}
 				else
 				{
-					document.ontouchmove = null;
+					document.ontouchmove = onmousemove_default(event);
 				}
 			}
 		}
 		document.ontouchend = function(event) {
-			if(logger_selected(event)){
+			if(logger_selected(event)||out_of_bounds(event)){
 				green_selector.style.transform = "translate(0px,0px)";
 				green_selector_ring.style.transform = "translate(0px,0px)";
 				red_selector.style.transform = "translate(0px,0px)";
@@ -1401,6 +1439,7 @@
 
 	function scroll_to_point(i)
 	{
+		document.onmousemove = function(event){ onmousemove_default(event) };
 		location_pointer.style.display = "block";
 		selected_point = document.getElementById("point"+i);
 		selected_point.scrollIntoView(true);
@@ -1415,6 +1454,7 @@
 
 	function render_route(event,change_cornerA=false,change_cornerB=false)
 	{
+		path=[];
 		location_pointer.style.display = "none";
 		if(nearest([pointerX,pointerY])[0]<0) return;
 		if(event.pageX-window.scrollX>=view_width||event.pageY-window.scrollY>=view_height) return;
@@ -1538,9 +1578,10 @@
 			setMarker(cornerA,1,"green","black");
 			setMarker(cornerB,1,"red","black");
 		}
-		print_route(path4);
+		path=path4;
+		print_route(path);
+		renew_svgs_clone();
 		current_time = new Date();
-		path=[];
 	}
 
 	function print_route(route)
@@ -1566,22 +1607,29 @@
 		var circle = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
 		var coords = getLocation(corner);
 		circle.setAttribute("id","point"+i);
-		circle.setAttribute("r",(0.5*lvl)+"vmin");
+		circle.setAttribute("r",(0.3175*lvl+0.5)/2+"vmax");
 		circle.setAttribute("cx",render_radius+coords[0]);
 		circle.setAttribute("cy",render_radius+coords[1]);
 		circle.setAttribute("stroke",stroke_color?stroke_color:colors[lvl-1]);
-		circle.setAttribute("stroke-width",0.125*lvl+"vmin");
+		circle.setAttribute("stroke-width",(0.125*lvl)/2+"vmax");
 		circle.setAttribute("fill",color);
-		circle.setAttribute("opacity",0.6);
 		var highlight_circle = circle.cloneNode(true);
 		highlight_circle.setAttribute("fill","white");
-		highlight_circle.setAttribute("stroke",colors[lvl-1]);
+		highlight_circle.setAttribute("stroke",colors[lvl-2]);
 		highlight_circle.setAttribute("stroke-width","0.5vmin");
-		highlight_circle.setAttribute("r",base_length(0.5+lvl)/meters_per_pixel);
+		highlight_circle.setAttribute("r",base_length(lvl-0.5)/meters_per_pixel);
 		highlight_circle.setAttribute("fill-opacity",0.03);
 		highlight_circle.setAttribute("class","drop_shadow");
-		svg_overlays[levels].appendChild(highlight_circle);
 		svg_overlays[0].appendChild(circle);
+	 	svg_overlays[levels+1].appendChild(highlight_circle);
+	 	if(color=="red")
+	 	{
+	 		 circle.setAttribute("id","point_arrival");
+	 	}
+	 	if(color=="green")
+	 	{
+	 		 circle.setAttribute("id","point_departure");
+	 	}
 		if(color=="red"||color=="green")
 		{
 			highlight_circle.setAttribute("id",color+"_selector_ring");
@@ -1589,16 +1637,19 @@
 			var highlight_circle2 = circle.cloneNode(true);
 			highlight_circle2.setAttribute("id",color+"_selector");
 		 	highlight_circle2.setAttribute("stroke",color);
-		 	highlight_circle2.setAttribute("r",base_length(levels/2+0.5)/meters_per_pixel);
+		 	highlight_circle2.setAttribute("r",base_length(levels/2)/meters_per_pixel);
 		 	highlight_circle2.setAttribute("fill-opacity",0.5);
-		 	svg_overlays[0].appendChild(highlight_circle2);
+		 	svg_overlays[levels+1].appendChild(highlight_circle2);
+		}
+		else if(i==0||i==path.length-1)
+		{
+			circle.setAttribute("opacity",0.01);
 		}
 	}
 
 	function setLine(cornerA,cornerC,lvl,isFirst=false,isLast=false,i=0)
 	{
 		var line = document.createElementNS("http://www.w3.org/2000/svg", 'line');
-		svg_overlays[lvl].appendChild(line);
 
 		var coordsA = getLocation(cornerA);
 		var coordsC = getLocation(cornerC);
@@ -1613,18 +1664,28 @@
 		line.setAttribute("y1",render_radius+coordsA[1]);
 		line.setAttribute("x2",render_radius+coordsC[0]);
 		line.setAttribute("y2",render_radius+coordsC[1]);
-		line.setAttribute("stroke","black");
-		line.setAttribute("stroke-width",(0.5*lvl+0.5)+"vmax");
 		line.setAttribute("stroke-linecap","round");
+		line.setAttribute("stroke",colors[lvl-1]);
+		line.setAttribute("stroke-width",(0.25*lvl+0.5)+"vmax");
 		var line_border = line.cloneNode(true);
-		line_border.setAttribute("stroke",colors[lvl-1]);
-		line_border.setAttribute("stroke-width",(0.25*lvl+0.5)+"vmax");
+		line_border.setAttribute("stroke","black");
+		line_border.setAttribute("stroke-width",(0.375*lvl+0.5)+"vmax");
 		svg_overlays[lvl].appendChild(line_border);
+		svg_overlays[lvl].appendChild(line);
 
-		setMarker(cornerA,getLevel(cornerA)-1,"yellow","black",i);
+		var levelA = getLevel(cornerA);
+		var levelC = getLevel(cornerC);
+		var markerLevel = levelA < levelC ? levelA : levelC;
+
+		setMarker(cornerA,getLevel(cornerA),"yellow","black",i,markerLevel-1);
 		if(isLast) i++;
-		setMarker(cornerC,getLevel(cornerC)-1,"yellow","black",i);
+		setMarker(cornerC,getLevel(cornerC),"yellow","black",i,markerLevel-1);
+		if(isLast) i--;
 		print_output(segment_dist,direction,lvl,isFirst,isLast,i);
+		if(isLast)
+		{
+			print_to_log(`<div style="display:inline-block; line-height: 30vmax">&nbsp;</div>`);
+		}
 
 	}
 
@@ -1651,13 +1712,25 @@
 
 		var icon1_text=`<div class="via_icon"></div>`;
 		var icon2_text=`<div class="via_icon"></div>`;
-		if(isFirst) icon1_text=`<div class="start_icon"></div>`;
-		else if(isLast) icon2_text=`<div class="end_icon"></div>`;
-
-
+		var ii = i+1;
+		if(isFirst)
+		{
+			icon1_text=`<div class="start_icon"></div>`;
+			i = `_departure`;
+		}
+		else if(isLast)
+		{
+			icon2_text=`<div class="end_icon"></div>`;
+			ii = `\'_arrival\'`;
+		}
 
 		print_to_log(`<a name="info`+i+`"><hr></a>`);
-		print_to_log(`<center>`+icon1_text+`<a href="javascript:scroll_to_point(`+i+`)">`+vehicles[lvl-1]+`</a>`+icon2_text+" ("+direction+")</center></a>",colors[lvl-1]);
+		if(isFirst)
+		{
+			icon1_text=`<div class="start_icon"></div>`;
+			i = `\'_departure\'`;
+		}
+		print_to_log(`<center><a href="javascript:scroll_to_point(`+i+`)">`+icon1_text+` `+vehicles[lvl-1]+`</a> <a href="javascript:scroll_to_point(`+ii+`)">`+icon2_text+` (`+direction+`)</a></center>`,colors[lvl-1]);
 		print_to_log(segment_dist+" meters in "+Math.floor(segment_times[lvl-1])+"m "+('00'+((segment_times[lvl-1]*60)%60).toFixed(0)).slice(-2)+"s");
 		if(lvl>1)
 		{
