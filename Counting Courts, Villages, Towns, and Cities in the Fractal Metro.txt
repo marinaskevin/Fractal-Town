@@ -164,10 +164,10 @@ METRO
 			+ 325 towns each with 6 extra brown squares with 4 lines each
 			+ 252 brown lines between 252 villages on the metro's outer periphery
 1 metro = 5491*36 - 11532 + 325*6*4 + 252 = 194196 brown lines
-1 metro = 92797 villages each with 36 white lines by default
+1 metro = 92797 courts each with 36 white lines by default
 			- 194196 white lines that are shared by number of brown lines
-			+ 5491 villages each with 6 extra brown squares with 4 lines each
-			+ 252 brown lines between 252 villages on the metro's outer periphery
+			+ 5491 villages each with 6 extra white squares with 4 lines each
+			+ 1020 white lines between 1020 villages on the metro's outer periphery
 1 metro = 92797*36 - 194196 + 5491*6*4 + 1020 = 3279300 white lines
 
 -------------

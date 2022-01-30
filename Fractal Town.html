@@ -4,7 +4,7 @@
 	<meta charset="utf-8"/>
 	<meta name="viewport" content="initial-scale=0.25">
 	<title>
-		FR△CT△L T□WN HTML5
+		FR△CT△L T□WN
 	</title>
 	<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.0.0-rc.5/dist/html2canvas.min.js"></script>
 </head>
@@ -29,7 +29,7 @@
 	}
 	#loading_message
 	{
-		background-color: black;
+		background-color: white;
 		opacity: 1;
 		position: fixed;
 		top: 40vh;
@@ -38,7 +38,8 @@
 		justify-content: center;
 		align-content: center;
 		text-align: center;
-		color: white;
+		font-size: 1.5vmax;
+		color: black;
 		padding: 5vh 10vw;
 		border-radius: 1.5vmax;
 		pointer-events: none;
@@ -65,7 +66,7 @@
 		left: 10vw;
 		color: white;
 		text-align: center;
-		border-radius: 1.5vmax 0px 0px 1.5vmax;
+		border-radius: 1.5vmax;
 	}
 	#pixel_info, #zoom_info
 	{
@@ -112,11 +113,12 @@
 	}
 	#zoom_info
 	{
-		background-color: rgba(85,107,47,0.8);
+		background-color: rgba(0,0,0,0.8);
 		position: fixed;
 		bottom: 0;
 		left: 0;
 		width: 100vw;
+		padding: 1vh;
 		text-align: center;
 		color: white;
 	}
@@ -145,25 +147,11 @@
 	#green_selector, #red_selector
 	{
 		pointer-events: fill;
-		margin: 100vmax;
-		padding: -100vmax;
 	}
-	#green_selector:hover, #red_selector:hover
-	{
-		stroke-color: "yellow";
-		z-index: 10;
 	}
 	div
 	{
 		padding: 0.2vw;
-	}
-	table
-	{
-		border: 1;
-	}
-	th, td
-	{
-		align: right;
 	}
 	a
 	{
@@ -192,7 +180,7 @@
 		border-collapse: collapse;
 		border-spacing: 0;
    }
-	.start_icon,.via_icon,.end_icon
+	.start_icon,.Block_icon,.Court_icon,.Village_icon,.Town_icon,.City_icon,.Metropolis_icon,.Megaregion_icon,.end_icon
 	{
 		display: inline-block;
 		background-repeat: no-repeat;
@@ -204,17 +192,47 @@
 	.start_icon
 	{
 		background-image: 
-        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100%' height='100%' viewBox='-30 -30 60 60'><circle r='20' stroke='black' stroke-width='6' fill='green' opacity='0.9'></circle></svg>");
+			url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100%' height='100%' viewBox='-30 -30 60 60'><circle r='27' stroke='black' stroke-width='6' fill='green' opacity='0.9'></circle></svg>");
 	}
-	.via_icon
+	.Block_icon
 	{
 		background-image: 
-        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100%' height='100%' viewBox='-30 -30 60 60'><circle r='20' stroke='black' stroke-width='6' fill='yellow' opacity='0.9'></circle></svg>");
+			url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100%' height='100%' viewBox='-30 -30 60 60'><circle r='27' stroke='black' stroke-width='6' fill='White' opacity='0.9'></circle></svg>");
+	}
+	.Court_icon
+	{
+		background-image: 
+			url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100%' height='100%' viewBox='-30 -30 60 60'><circle r='27' stroke='black' stroke-width='6' fill='Khaki' opacity='0.9'></circle></svg>");
+	}
+	.Village_icon
+	{
+		background-image: 
+			url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100%' height='100%' viewBox='-30 -30 60 60'><circle r='27' stroke='black' stroke-width='6' fill='LightSalmon' opacity='0.9'></circle></svg>");
+	}
+	.Town_icon
+	{
+		background-image: 
+			url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100%' height='100%' viewBox='-30 -30 60 60'><circle r='27' stroke='black' stroke-width='6' fill='LightGray' opacity='0.9'></circle></svg>");
+	}
+	.City_icon
+	{
+		background-image: 
+			url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100%' height='100%' viewBox='-30 -30 60 60'><circle r='27' stroke='black' stroke-width='6' fill='SkyBlue' opacity='0.9'></circle></svg>");
+	}
+	.Metropolis_icon
+	{
+		background-image: 
+			url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100%' height='100%' viewBox='-30 -30 60 60'><circle r='27' stroke='black' stroke-width='6' fill='Gold' opacity='0.9'></circle></svg>");
+	}
+	.Megaregion_icon
+	{
+		background-image: 
+			url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100%' height='100%' viewBox='-30 -30 60 60'><circle r='27' stroke='black' stroke-width='6' fill='LimeGreen' opacity='0.9'></circle></svg>");
 	}
 	.end_icon
 	{
 		background-image: 
-        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100%' height='100%' viewBox='-30 -30 60 60'><circle r='20' stroke='black' stroke-width='6' fill='red' opacity='0.9'></circle></svg>");
+			url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100%' height='100%' viewBox='-30 -30 60 60'><circle r='27' stroke='black' stroke-width='6' fill='red' opacity='0.9'></circle></svg>");
 	}
 	.no_prerender
 	{
@@ -229,9 +247,9 @@
 	{
     -webkit-animation: fadein 3s; /* Safari, Chrome and Opera > 12.1 */
        -moz-animation: fadein 3s; /* Firefox < 16 */
-        -ms-animation: fadein 3s; /* Internet Explorer */
-         -o-animation: fadein 3s; /* Opera < 12.1 */
-            animation: fadein 3s;
+			-ms-animation: fadein 3s; /* Internet Explorer */
+			 -o-animation: fadein 3s; /* Opera < 12.1 */
+			    animation: fadein 3s;
 	}
 
 	@keyframes fadein {
@@ -272,10 +290,12 @@
 		<canvas id="canvas3"></canvas>
 		<canvas id="canvas4"></canvas>
 		<canvas id="canvas5"></canvas>
+		<canvas id="canvas6"></canvas>
 		<canvas id="canvas_img"></canvas>
 	</div>
 	<img id="png_map" class="fadein">
 	<div id="svgs">
+		<svg id="svg_overlay7" xmlns="http://www.w3.org/2000/svg"></svg>
 		<svg id="svg_overlay6" xmlns="http://www.w3.org/2000/svg"></svg>
 		<svg id="svg_overlay5" xmlns="http://www.w3.org/2000/svg"></svg>
 		<svg id="svg_overlay4" xmlns="http://www.w3.org/2000/svg"></svg>
@@ -287,18 +307,19 @@
 	<div id="summary"><h1>Welcome!</h1></div>
 	<div id="logger"></div>
 	<div id="logger_control"><a href="#logger_top">Scroll to top</a></div>
-	<div id="zoom_info">To zoom, use the CTRL key+scroll wheel, or use touch.</div>
+	<div id="zoom_info">Zoom: "CTRL or ⌘" then "tap (+/-) keys or spin mouse Scroll Wheel".</div>
 	<div id="links">
 			Map<br>
 			<a href="?levels=1&meters_per_pixel=1&path_thickness=2" title="1 meter per pixel&#013;2x path thickness">Court</a><br>
 			<a href="?levels=2&meters_per_pixel=1&path_thickness=2" title="1 meter per pixel&#013;2x path thickness">Village</a><br>
 			<a href="?levels=3&meters_per_pixel=1&path_thickness=2" title="1 meter per pixel&#013;2x path thickness">Town</a><br>
 			<a href="?levels=4&meters_per_pixel=2&path_thickness=2" title="2 meters per pixel&#013;2x path thickness">City</a><br>
-			<a href="?levels=5&meters_per_pixel=5&path_thickness=3" title="5 meters per pixel&#013;3x path thickness">Metro</a>
+			<a href="?levels=5&meters_per_pixel=5&path_thickness=3" title="5 meters per pixel&#013;3x path thickness">Metro</a><br>
+			<a href="?levels=6&meters_per_pixel=18&path_thickness=2" title="18 meters per pixel&#013;2x path thickness">Megaregion</a>
 	</div>
 	<div id="map_info" class="drop_shadow"></div>
 	<div id="location_pointer" class="drop_shadow">←</div>
-	<div id="loading_message"></div>
+	<div id="loading_message" class="drop_shadow"></div>
 	<script>
 
 	var allow_print = true;
@@ -395,7 +416,6 @@
 
 	const meters_per_pixel=data["meters_per_pixel"];
 	const path_thickness=Number(data["path_thickness"]);
-	document.title = "Level "+levels+" FR△CT△L T□WN (HTML5)";
 
 	const s = 2+Math.sqrt(3);
 	const block_width = 50;
@@ -404,11 +424,13 @@
 	const system_px_width = system_width/meters_per_pixel
 	const render_radius = system_px_width/2 * Math.sqrt(1+1/Math.pow(s,2)) * (s/(s-1));
 	const d60 = 60/360 * 2*Math.PI
-	const colors = ["Khaki","LightSalmon","LightGray","SkyBlue","Gold"];
-	const vehicles = ["Sidewalk","Light EV","Heavy EV","Light Rail","Heavy Rail"];
-	const places = ["Court","Village","Town","City","Metropolis"];
-	const station_wait_times = [0,24,24,24,24]; // seconds
-	const segment_times = [1,1,1.5,3,6]; // minutes
+	const colors = ["Khaki","LightSalmon","LightGray","SkyBlue","Gold","LimeGreen"];
+	const vehicles = ["Sidewalk","Light EV","Heavy EV","Light Rail","Heavy Rail","High Speed Rail"];
+	const places = ["Court","Village","Town","City","Metropolis","Megaregion"];
+	const hub_numbers = [1,19,325,"5,491","92,797","1,568,947"];
+	const line_numbers = [36,684,"11,532","194,196","3,279,300","55,434,012"];
+	const station_wait_times = [0,24,24,24,24,24]; // seconds
+	const segment_times = [1,1,1.5,3,6,9]; // minutes
 	const acceleration = 0.7; // m/s^2
 	const top_kph = calculateTOP_KPH(levels);
 	const runways = calculateRunways(levels);
@@ -416,19 +438,45 @@
 
 	const descriptions = 
 	[
-		`Rendering a hub`
+		`<h1>1 court <div class="Court_icon"></div></h1>
+		<br>36 lots`
 		,
-		`Rendering 19 hubs`
+		`<h1>1 village <div class="Village_icon"></div></h1>
+		<br>courts 19 <div class="Court_icon"></div>
+		<br>lots 684 `
 		,
-		`Rendering 325 hubs`
+		`<h1>1 town <div class="Town_icon"></div></h1>
+		<br>villages 19 <div class="Village_icon"></div>
+		<br>courts 325 <div class="Court_icon"></div>
+		<br>lots 11,700`
 		,
-		`Rendering 5491 hubs`
+		`<h1>1 city <div class="City_icon"></div></h1>
+		<br>towns 19 <div class="Town_icon"></div>
+		<br>villages 325 <div class="Village_icon"></div>
+		<br>courts 5,491 <div class="Court_icon"></div>
+		<br>lots 197,676`
 		,	
-		`Rendering 92797 hubs`
+		`<h1>1 metropolis <div class="Metropolis_icon"></div></h1>
+		<br>cities 19 <div class="City_icon"></div>
+		<br>towns 325 <div class="Town_icon"></div>
+		<br>villages 5,491 <div class="Village_icon"></div>
+		<br>courts 92,797 <div class="Court_icon"></div>
+		<br>lots 3,340,692`
+		,	
+		`<h1>1 megaregion <div class="Megaregion_icon"></div></h1>
+		<br>metropolises 19 <div class="Metropolis_icon"></div>
+		<br>cities 325 <div class="City_icon"></div>
+		<br>towns 5,491 <div class="Town_icon"></div>
+		<br>villages 92,797 <div class="Village_icon"></div>
+		<br>courts 1,568,947 <div class="Court_icon"></div>
+		<br>lots 56,482,092`
 
 	];
 
-	loading_message.innerHTML += descriptions[levels-1];
+	if(levels>1) document.title = "Dodecagonal Fractal "+places[levels-1].toUpperCase();
+	else document.title = "Dodecagonal "+places[levels-1].toUpperCase();
+
+	loading_message.innerHTML += "<h1>Rendering</h1>"+descriptions[levels-1];
 
 	const total_width = 2 * block_width * Math.sqrt(s) * geometric_sum(s,levels);
 	var distance_label = "";
@@ -473,11 +521,13 @@
 	function print_header()
 	{
 		print_to_log(`<a name="logger_top"/>`);
-		if(levels>=1) print_to_log(base_length(1).toFixed(0)+`-meter `+vehicles[0]+`s`,`Khaki`);
-		if(levels>=2) print_to_log(base_length(2).toFixed(0)+`-meter `+vehicles[1]+` segments`,`LightSalmon`);
-		if(levels>=3) print_to_log(base_length(3).toFixed(0)+`-meter `+vehicles[2]+` segments`,`LightGray`);
-		if(levels>=4) print_to_log((base_length(4)/1000).toFixed(1)+`-km `+vehicles[3]+` segments`,`SkyBlue`);
-		if(levels>=5) print_to_log((base_length(5)/1000).toFixed(1)+`-km `+vehicles[4]+` segments`,`Gold`);
+		print_to_log("<br>")
+		if(levels>=6) print_to_log(line_numbers[levels-6]+" "+(base_length(6)/1000).toFixed(1)+`-km paths for <span style="background-color: black; color: `+colors[5]+`">`+places[5]+`</span> `+vehicles[5],`LimeGreen`);
+		if(levels>=5) print_to_log(line_numbers[levels-5]+" "+(base_length(5)/1000).toFixed(1)+`-km paths for <span style="background-color: black; color: `+colors[4]+`">`+places[4]+`</span> `+vehicles[4],`Gold`);
+		if(levels>=4) print_to_log(line_numbers[levels-4]+" "+(base_length(4)/1000).toFixed(1)+`-km paths for <span style="background-color: black; color: `+colors[3]+`">`+places[3]+`</span> `+vehicles[3],`SkyBlue`);
+		if(levels>=3) print_to_log(line_numbers[levels-3]+" "+base_length(3).toFixed(0)+`-meter paths for <span style="background-color: black; color: `+colors[2]+`">`+places[2]+`</span> `+vehicles[2],`LightGray`);
+		if(levels>=2) print_to_log(line_numbers[levels-2]+" "+base_length(2).toFixed(0)+`-meter paths for <span style="background-color: black; color: `+colors[1]+`">`+places[1]+`</span> `+vehicles[1],`LightSalmon`);
+		if(levels>=1) print_to_log(line_numbers[levels-1]+" "+base_length(1).toFixed(0)+`-meter paths for <span style="background-color: black; color: `+colors[0]+`">`+places[0]+`</span> `+vehicles[0]+`s`,`Khaki`);
 	}
 	// □2 = 6□ + 12△ + 1✧ = 7□ + 16△ + 0✧
 	// ((6+1) + (12+4)*sin(60 degrees)/2)/(2+sqrt(3))^2
@@ -516,7 +566,7 @@
 		var view_height = document.documentElement.clientHeight - document.documentElement.offsetHeight;
 		if(render_radius <= view_width/2&&render_radius <= view_height/2)
 		{
-			object.style.transform = 'translate('+(view_width/2-render_radius)+'px,'+(view_height/5)+'px)';
+			object.style.transform = 'translate('+(view_width/2-render_radius)+'px,'+(view_height/10)+'px)';
 		}
 		else
 		{
@@ -1122,6 +1172,7 @@
 	var img;
 	var view_width = document.body.scrollWidth;
 	var view_height = document.documentElement.clientHeight - document.documentElement.offsetHeight;
+	var vmax = view_width > view_height ? view_width : view_height;
 	var zoom_target = [];
 	var scrollbarWidth,scrollbarHeight;
 	var point;
@@ -1129,6 +1180,7 @@
 
 	function updateViewDimensions()
 	{
+		vmax = view_width > view_height ? view_width : view_height;
 		scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
 		scrollbarHeight = window.innerHeight - document.documentElement.clientHeight;
 		var new_view_width = document.body.clientWidth;
@@ -1153,7 +1205,8 @@
 		pixel_info.innerHTML = (1000/meters_per_pixel*devicePixelRatio).toFixed(0)+" pixels per kilometer<br>"+path_thickness+"x path thickness";
 	}
 
-	window.addEventListener('resize', function() {
+	window.addEventListener('resize', function(event) {
+		logger.scrollTop = logger.scrollHeight * logger_scrollY;
 		center_all();
 		updateViewDimensions();
 		renew_svgs_clone();
@@ -1191,7 +1244,7 @@
 					loading_message.style.display = "none";
 					loaded = true;
 				}
-			},1000);
+			},3000);
 		img.src = 'Dodecagonal '+places[levels-1]+' ('+meters_per_pixel+','+path_thickness+').png';
 		setTimeout(function() {
 			window.scroll(render_radius-view_width/2,render_radius/10-view_height/4);
@@ -1203,9 +1256,11 @@
 
 	var use_touch = false;
 	var pageX,pageY;
+	var logger_scrollY = 0;
 
 	function updatePointer(event)
 	{
+		logger_scrollY = logger.scrollTop / logger.scrollHeight;
 		if(logger.scrollTop>0)
 		{
 			logger_control.style.display = "block";
@@ -1264,20 +1319,22 @@
 
 	function out_of_bounds(event)
 	{
-		if(zoom_target[0]>0.95||zoom_target[1]>0.95) return true;
+		if(zoom_target[0]>0.999||zoom_target[1]>0.965) return true;
 
 		var clickCorner = nearest([mouse_down_X,mouse_down_Y]);
 		var clickLocation = getLocation(clickCorner);
 		var cc_x = clickLocation[0];
 		var cc_y = clickLocation[1];
-		if(Math.sqrt(Math.pow((mouse_down_X-cc_x),2)+Math.pow((mouse_down_Y-cc_y),2))>base_length(levels/2)/meters_per_pixel){
+		if(Math.sqrt(Math.pow((mouse_down_X-cc_x),2)+Math.pow((mouse_down_Y-cc_y),2)) > 0.1 * vmax * devicePixelRatio){
 			 return true;
 		}			
+		return false;
 	}
 
 	function logger_selected(event)
 	{
 		if(logger.getBoundingClientRect().left < (pageX-window.scrollX) && logger.getBoundingClientRect().top < (pageY-window.scrollY) && logger.getBoundingClientRect().right > (pageX-window.scrollX) && logger.getBoundingClientRect().bottom > (pageY-window.scrollY)) return true;
+		else if(links.getBoundingClientRect().left < (pageX-window.scrollX) && links.getBoundingClientRect().top < (pageY-window.scrollY) && links.getBoundingClientRect().right > (pageX-window.scrollX) && links.getBoundingClientRect().bottom > (pageY-window.scrollY)) return true;
 		else false;		
 	}
 
@@ -1295,14 +1352,14 @@
 		{
 			var distanceAC = distance(cornerA,clickCorner);
 			var distanceBC = distance(cornerB,clickCorner);
-			if(distanceBC < base_length(levels-1))
+			if(distanceBC/meters_per_pixel < 0.1*vmax && distanceBC < distanceAC)
 			{
 				change_cornerB = true;
 				active_corner = cornerB;
 				relX = pointerX - getLocation(cornerB)[0];
 				relY = pointerY - getLocation(cornerB)[1];
 			}
-			else if(distanceAC < base_length(levels-1))
+			if(distanceAC/meters_per_pixel < 0.1*vmax && distanceAC < distanceBC)
 			{
 				change_cornerA = true;
 				active_corner = cornerA;
@@ -1345,7 +1402,7 @@
 					document.onmouseup = function() {
 						if(use_touch) return;
 						updatePointer(event);
-						document.onmousemove = onmousemove_default(event);
+						document.onmousemove = function(event){ onmousemove_default(event) };
 						document.onmouseup = null;
 						if(out_of_bounds(event)) return;
 						render_route(event,change_cornerA,change_cornerB);
@@ -1354,10 +1411,12 @@
 			}
 		}
 		document.onmouseup = function(event) {
+			change_cornerA = false;
+			change_cornerB = false;
 			if(logger_selected(event)) return;
 			if(use_touch) return;
 			updatePointer(event);
-			document.onmousemove = onmousemove_default(event);
+			document.onmousemove = function(event){ onmousemove_default(event) };
 			if(out_of_bounds(event)) return;
 			render_route(event,change_cornerA,change_cornerB);
 		}
@@ -1398,21 +1457,21 @@
 					if(change_cornerA)
 					{
 						var translate = "translate("+(pointerX-relX - getLocation(getCornerA())[0])+"px,"+(pointerY-relY - getLocation(getCornerA())[1])+"px)";
-						point_departure.style.transform = translate;
+						point_start.style.transform = translate;
 						green_selector.style.transform = translate;
 						green_selector_ring.style.transform = translate;
 					}					
 					if(change_cornerB)
 					{
 						var translate = "translate("+(pointerX-relX - getLocation(getCornerB())[0])+"px,"+(pointerY-relY - getLocation(getCornerB())[1])+"px)";
-						point_arrival.style.transform = translate;
+						point_finish.style.transform = translate;
 						red_selector.style.transform = translate;
 						red_selector_ring.style.transform = translate;
 					}
 				}
 				else
 				{
-					document.ontouchmove = onmousemove_default(event);
+					document.ontouchmove = function(event){ onmousemove_default(event) };
 				}
 			}
 		}
@@ -1494,7 +1553,7 @@
 			setMarker(cornerA,1,"green","black");
 			print_header();
 			print_to_log("<hr>");
-			print_to_log(`<span style="color: green">Departing</span> location `+JSON.stringify(cornerA));
+			print_to_log(`<span style="color: green">Start</span> location `+JSON.stringify(cornerA));
 			return;
 		}
 		print_header();
@@ -1508,8 +1567,8 @@
 		}
 		if(cornerA[cornerA.length-1] < 0 || cornerB[cornerA.length-1] < 0) return;
 		print_to_log("<hr>");
-		print_to_log(`<span style="color: green">Departing</span> location `+JSON.stringify(cornerA));
-		print_to_log(`<span style="color: red">Arrival</span> location `+JSON.stringify(cornerB));
+		print_to_log(`<span style="color: green">Going from </span> location `+JSON.stringify(cornerA));
+		print_to_log(`<span style="color: red">Going to </span> location `+JSON.stringify(cornerB));
 		path_finder(cornerA,cornerB);
 		var path1 = path.slice(0);
 		path_finder(cornerB,cornerA);
@@ -1607,7 +1666,7 @@
 		var circle = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
 		var coords = getLocation(corner);
 		circle.setAttribute("id","point"+i);
-		circle.setAttribute("r",(0.3175*lvl+0.5)/2+"vmax");
+		circle.setAttribute("r",(0.3175*lvl+0.4)/2+"vmax");
 		circle.setAttribute("cx",render_radius+coords[0]);
 		circle.setAttribute("cy",render_radius+coords[1]);
 		circle.setAttribute("stroke",stroke_color?stroke_color:colors[lvl-1]);
@@ -1624,21 +1683,23 @@
 	 	svg_overlays[levels+1].appendChild(highlight_circle);
 	 	if(color=="red")
 	 	{
-	 		 circle.setAttribute("id","point_arrival");
+	 		 circle.setAttribute("id","point_finish");
 	 	}
 	 	if(color=="green")
 	 	{
-	 		 circle.setAttribute("id","point_departure");
+	 		 circle.setAttribute("id","point_start");
 	 	}
 		if(color=="red"||color=="green")
 		{
 			highlight_circle.setAttribute("id",color+"_selector_ring");
-			highlight_circle.setAttribute("stroke-width","3vmin");
-			var highlight_circle2 = circle.cloneNode(true);
+		 	highlight_circle.setAttribute("stroke",color);
+			highlight_circle.setAttribute("r","5vmax");
+			highlight_circle.setAttribute("fill-opacity",0.2);
+			highlight_circle.setAttribute("stroke-opacity",0.2);
+			highlight_circle.setAttribute("stroke-width","5vmin");
+			var highlight_circle2 = highlight_circle.cloneNode(true);
 			highlight_circle2.setAttribute("id",color+"_selector");
-		 	highlight_circle2.setAttribute("stroke",color);
-		 	highlight_circle2.setAttribute("r",base_length(levels/2)/meters_per_pixel);
-		 	highlight_circle2.setAttribute("fill-opacity",0.5);
+		 	highlight_circle2.setAttribute("r","8vmax");
 		 	svg_overlays[levels+1].appendChild(highlight_circle2);
 		}
 		else if(i==0||i==path.length-1)
@@ -1666,22 +1727,41 @@
 		line.setAttribute("y2",render_radius+coordsC[1]);
 		line.setAttribute("stroke-linecap","round");
 		line.setAttribute("stroke",colors[lvl-1]);
-		line.setAttribute("stroke-width",(0.25*lvl+0.5)+"vmax");
+		line.setAttribute("stroke-width",(0.25*lvl+0.4)+"vmax");
 		var line_border = line.cloneNode(true);
 		line_border.setAttribute("stroke","black");
-		line_border.setAttribute("stroke-width",(0.375*lvl+0.5)+"vmax");
+		line_border.setAttribute("stroke-width",(0.375*lvl+0.4)+"vmax");
 		svg_overlays[lvl].appendChild(line_border);
 		svg_overlays[lvl].appendChild(line);
 
 		var levelA = getLevel(cornerA);
 		var levelC = getLevel(cornerC);
-		var markerLevel = levelA < levelC ? levelA : levelC;
 
-		setMarker(cornerA,getLevel(cornerA),"yellow","black",i,markerLevel-1);
+		var marker_color = "white";
+		if(levelA > 1) marker_color = colors[levelA-2];
+
+		if(cornerA.length==0||cornerA[levels-levelA]==0) levelA++;
+		var sub_levelA = levelA;
+		if(sub_levelA > 1) marker_color = colors[sub_levelA-2];
+		setMarker(cornerA,sub_levelA--,marker_color,"black",i);
+		while(sub_levelA>=0)
+		{
+			setMarker(cornerA,sub_levelA--,marker_color,marker_color,i);
+		}
+
 		if(isLast) i++;
-		setMarker(cornerC,getLevel(cornerC),"yellow","black",i,markerLevel-1);
+
+		if(cornerC.length==0||cornerC[levels-levelC]==0) levelC++;
+		var sub_levelC = levelC;
+		setMarker(cornerC,sub_levelC--,marker_color,"black",i);
+		while(sub_levelC>=0)
+		{
+			setMarker(cornerC,sub_levelC--,marker_color,marker_color,i);
+		}
+
 		if(isLast) i--;
-		print_output(segment_dist,direction,lvl,isFirst,isLast,i);
+
+		print_output(segment_dist,direction,lvl,isFirst,isLast,i,levelA-1,levelC-1);
 		if(isLast)
 		{
 			print_to_log(`<div style="display:inline-block; line-height: 30vmax">&nbsp;</div>`);
@@ -1689,7 +1769,7 @@
 
 	}
 
-	function print_output(segment_dist,direction,lvl,isFirst=false,isLast=false,i)
+	function print_output(segment_dist,direction,lvl,isFirst=false,isLast=false,i,pt1_lvl,pt2_lvl)
 	{
 		var seconds_to_get_on = seconds_to_get_off = station_wait_times[lvl-1]/2; // seconds
 		var seconds_to_accelerate = seconds_to_decelerate = top_kph[lvl-1]*1000/3600/acceleration; // seconds
@@ -1697,7 +1777,7 @@
 		var top_speed = top_kph[lvl-1]; // kilometers per hour
 		var cruise_distance = (segment_dist-runways[lvl-1]*2)/1000; // kilometers
 		var cruise_time = (segment_dist-runways[lvl-1]*2)/(top_kph[lvl-1]*1000/3600); // seconds
-		var departure_time = new Date((Math.ceil(current_time.getTime()/60/1000)*60*1000));
+		var start_time = new Date((Math.ceil(current_time.getTime()/60/1000)*60*1000));
 		var estimated_time = new Date((Math.ceil(current_time.getTime()/60/1000)+total_time)*60*1000); // time
 
 		segment_dist = roundDigits(segment_dist,0);
@@ -1709,28 +1789,31 @@
 		top_speed = roundDigits(top_speed,1);
 		seconds_to_decelerate = roundDigits(seconds_to_decelerate,1);
 		seconds_to_get_off = roundDigits(seconds_to_get_off,1);
-
-		var icon1_text=`<div class="via_icon"></div>`;
-		var icon2_text=`<div class="via_icon"></div>`;
+		var place1 = "Block";
+		var place2 = "Block";
+		if(pt1_lvl>0) place1 = places[pt1_lvl-1];
+		if(pt2_lvl>0) place2 = places[pt2_lvl-1];
+		var icon1_text=`<div class="`+place1+`_icon"></div>`;
+		var icon2_text=`<div class="`+place2+`_icon"></div>`;
 		var ii = i+1;
 		if(isFirst)
 		{
 			icon1_text=`<div class="start_icon"></div>`;
-			i = `_departure`;
+			i = `_start`;
 		}
 		else if(isLast)
 		{
 			icon2_text=`<div class="end_icon"></div>`;
-			ii = `\'_arrival\'`;
+			ii = `\'_finish\'`;
 		}
 
 		print_to_log(`<a name="info`+i+`"><hr></a>`);
 		if(isFirst)
 		{
 			icon1_text=`<div class="start_icon"></div>`;
-			i = `\'_departure\'`;
+			i = `\'_start\'`;
 		}
-		print_to_log(`<center><a href="javascript:scroll_to_point(`+i+`)">`+icon1_text+` `+vehicles[lvl-1]+`</a> <a href="javascript:scroll_to_point(`+ii+`)">`+icon2_text+` (`+direction+`)</a></center>`,colors[lvl-1]);
+		print_to_log(`<center><a href="javascript:scroll_to_point(`+i+`)">`+icon1_text+` `+places[lvl-1]+` `+vehicles[lvl-1]+`</a> <a href="javascript:scroll_to_point(`+ii+`)">`+icon2_text+` (`+direction+`)</a></center>`,colors[lvl-1]);
 		print_to_log(segment_dist+" meters in "+Math.floor(segment_times[lvl-1])+"m "+('00'+((segment_times[lvl-1]*60)%60).toFixed(0)).slice(-2)+"s");
 		if(lvl>1)
 		{
@@ -1748,13 +1831,15 @@
 			 print_to_log(seconds_to_get_on+" seconds for passengers boarding off");
 		}
 		var travel_text = "Travel "+(total_distance/1000).toFixed(3)+" km in "+Math.floor(total_time)+"m "+('00'+((total_time*60)%60).toFixed(0)).slice(-2)+"s";
-		var departure_text = "Departure time "+departure_time.toLocaleTimeString();
-		var arrival_text = "Arrival time "+estimated_time.toLocaleTimeString();
-		print_to_log(travel_text);
-		print_to_log(arrival_text);
+		var start_text = "Start time "+start_time.toLocaleTimeString();
+		var finish_text = "Finish time "+estimated_time.toLocaleTimeString();				print_to_log(travel_text);
+		var avg_kph = (total_distance/1000)/(total_time/60);
+		var avg_mph = avg_kph*1000*100/2.54/12/5280;
+		var average_speed = "Average "+avg_kph.toFixed(1)+" KPH or "+avg_mph.toFixed(1)+" MPH";
+		print_to_log(finish_text);
 		if(isLast)
 		{
-			summary.innerHTML = travel_text+"<br>"+departure_text+"<br>"+arrival_text;
+			summary.innerHTML = travel_text+"<br>"+start_text+"<br>"+finish_text+"<br>"+average_speed+"<hr>"+descriptions[levels-1];
 		}
 	}
 
